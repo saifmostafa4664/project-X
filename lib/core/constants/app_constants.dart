@@ -57,6 +57,7 @@ class RouteNames {
   static const String battery = 'battery';
   static const String settings = 'settings';
   static const String debug = 'debug';
+  static const String profile = 'profile';
 }
 
 /// Route paths for navigation
@@ -70,6 +71,7 @@ class RoutePaths {
   static const String battery = '/battery';
   static const String settings = '/settings';
   static const String debug = '/debug';
+  static const String profile = '/profile';
 }
 
 /// Storage keys for SharedPreferences

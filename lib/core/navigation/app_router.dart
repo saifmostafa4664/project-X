@@ -15,6 +15,7 @@ import '../../features/battery/presentation/battery_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/debug/presentation/debug_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/profile/presentation/profile_screen.dart';
 
 /// Provider for the router instance
 final routerProvider = Provider<GoRouter>((ref) {
@@ -158,6 +159,26 @@ final routerProvider = Provider<GoRouter>((ref) {
             return SlideTransition(
               position: animation.drive(tween),
               child: child,
+            );
+          },
+        ),
+      ),
+
+      // Profile
+      GoRoute(
+        path: RoutePaths.profile,
+        name: RouteNames.profile,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const ProfileScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final tween = Tween(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: Curves.easeOutCubic));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: FadeTransition(opacity: animation, child: child),
             );
           },
         ),
