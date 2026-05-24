@@ -36,6 +36,25 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   riverpod_generator: ^2.4.0
   build_runner: ^2.4.9
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo/Screenshot_2026-04-30_at_9.08.31_PM-removebg-preview.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/logo/Screenshot_2026-04-30_at_9.08.31_PM-removebg-preview.png"
+    background_color: "#0f0f23"
+    theme_color: "#7c3aed"
+  windows:
+    generate: true
+    image_path: "assets/logo/Screenshot_2026-04-30_at_9.08.31_PM-removebg-preview.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/logo/Screenshot_2026-04-30_at_9.08.31_PM-removebg-preview.png"
 
 flutter:
   uses-material-design: true
@@ -43,4 +62,4 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-
+    - assets/logo/

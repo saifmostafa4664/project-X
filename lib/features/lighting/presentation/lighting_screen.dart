@@ -41,18 +41,18 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lighting'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      backgroundColor:
+          isDark ? AppColors.darkBackground : AppColors.lightBackground,
+      body: CustomScrollView(
+        slivers: [
+          // Custom header
+          SliverToBoxAdapter(
+            child: _LightingHeader(isDark: isDark, isOn: lighting.isOn),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
             // Light Preview Card
             Container(
               width: double.infinity,
@@ -265,9 +265,11 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
               ),
             ),
 
-            const SizedBox(height: 40),
-          ],
-        ),
+              const SizedBox(height: 40),
+              ]),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -409,5 +411,81 @@ class _LightingModeCard extends StatelessWidget {
           AppColors.party,
         );
     }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Lighting Screen Header
+// ─────────────────────────────────────────────────────────────
+class _LightingHeader extends StatelessWidget {
+  final bool isDark;
+  final bool isOn;
+  const _LightingHeader({required this.isDark, required this.isOn});
+
+  @override
+  Widget build(BuildContext context) {
+    final topPad = MediaQuery.of(context).padding.top;
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, topPad + 16, 20, 20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [const Color(0xFF1A1028), const Color(0xFF120E20)]
+              : [const Color(0xFFF5F0FF), const Color(0xFFEDE8FF)],
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF7C3AED), Color(0xFF6D28D9)],
+              ),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF7C3AED).withValues(alpha: 0.4),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Icon(Icons.lightbulb_rounded,
+                color: Colors.white, size: 22),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Lighting Control',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: isDark ? Colors.white : const Color(0xFF1E1B4B),
+                  ),
+                ),
+                Text(
+                  isOn ? '● Active' : '○ Off',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: isOn
+                        ? const Color(0xFF10B981)
+                        : (isDark
+                            ? const Color(0xFF64748B)
+                            : const Color(0xFF94A3B8)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -21,17 +21,17 @@ class SoundScreen extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sound System'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
+      backgroundColor:
+          isDark ? AppColors.darkBackground : AppColors.lightBackground,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: _SoundHeader(isDark: isDark, isPlaying: sound.isPlaying),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
             // Now Playing Card
             Container(
               width: double.infinity,
@@ -326,8 +326,10 @@ class SoundScreen extends ConsumerWidget {
             ).animate().fadeIn(duration: 500.ms, delay: 200.ms),
 
             const SizedBox(height: 40),
-          ],
-        ),
+              ]),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -390,6 +392,82 @@ class _VolumeButton extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Sound Screen Header
+// ─────────────────────────────────────────────────────────────
+class _SoundHeader extends StatelessWidget {
+  final bool isDark;
+  final bool isPlaying;
+  const _SoundHeader({required this.isDark, required this.isPlaying});
+
+  @override
+  Widget build(BuildContext context) {
+    final topPad = MediaQuery.of(context).padding.top;
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, topPad + 16, 20, 20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [const Color(0xFF0F1F2A), const Color(0xFF0A1520)]
+              : [const Color(0xFFECFDF5), const Color(0xFFD1FAE5)],
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF0D9488), Color(0xFF0F766E)],
+              ),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF0D9488).withValues(alpha: 0.4),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Icon(Icons.music_note_rounded,
+                color: Colors.white, size: 22),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Sound System',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: isDark ? Colors.white : const Color(0xFF134E4A),
+                  ),
+                ),
+                Text(
+                  isPlaying ? '♪ Now Playing' : '○ Paused',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: isPlaying
+                        ? const Color(0xFF10B981)
+                        : (isDark
+                            ? const Color(0xFF64748B)
+                            : const Color(0xFF94A3B8)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

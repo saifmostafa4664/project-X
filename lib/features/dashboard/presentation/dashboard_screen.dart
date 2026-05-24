@@ -30,7 +30,6 @@ class DashboardScreen extends ConsumerStatefulWidget {
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen>
     with TickerProviderStateMixin {
-  int _selectedIndex = 0;
   late ScrollController _scrollCtrl;
   late AnimationController _auroraCtrl;
   double _scrollOffset = 0;
@@ -191,33 +190,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               ),
             ],
           ),
-
-          // ── Floating Island Nav Bar ────────────────────────
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: _FloatingIslandNav(
-              selectedIndex: _selectedIndex,
-              onTap: (i) {
-                HapticFeedback.selectionClick();
-                setState(() => _selectedIndex = i);
-                switch (i) {
-                  case 0:
-                    break; // already on dashboard
-                  case 1:
-                    context.push(RoutePaths.lighting);
-                  case 2:
-                    context.push(RoutePaths.sound);
-                  case 3:
-                    context.push(RoutePaths.battery);
-                }
-              },
-            )
-                .animate()
-                .fadeIn(delay: 500.ms, duration: 500.ms)
-                .slideY(begin: 0.6, end: 0),
-          ),
         ],
       ),
     );
@@ -242,7 +214,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       iconColor: lighting.isOn ? lighting.color : AppColors.amber,
       isActive: lighting.isOn,
       isEnabled: isConnected,
-      onTap: () => context.push(RoutePaths.lighting),
+      onTap: () => context.go(RoutePaths.lighting),
       onToggle: () {
         if (isConnected) {
           ref.read(lightingControlProvider.notifier).toggle();
@@ -263,7 +235,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       iconColor: sound.isPlaying ? AppColors.teal : AppColors.rose,
       isActive: sound.isPlaying,
       isEnabled: isConnected,
-      onTap: () => context.push(RoutePaths.sound),
+      onTap: () => context.go(RoutePaths.sound),
       onToggle: () {
         if (isConnected) {
           ref.read(soundControlProvider.notifier).togglePlayback();

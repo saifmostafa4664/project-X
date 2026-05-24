@@ -1,7 +1,4 @@
-/// Smart Umbrella App - App Constants
-///
-/// This file contains all application-wide constants including animation
-/// durations, default values, and configuration settings.
+/// Smart Umbrella App - App Constants (updated with splash route)
 library;
 
 /// Animation durations used throughout the app
@@ -23,8 +20,7 @@ class DefaultValues {
   static const int brightness = 70;
   static const int batteryLow = 20;
   static const int batteryFull = 100;
-  static const double solarThreshold =
-      30.0; // Watts threshold for "strong sunlight"
+  static const double solarThreshold = 30.0;
 }
 
 /// App-wide string constants
@@ -34,7 +30,6 @@ class AppStrings {
   static const String appName = 'Smart Umbrella';
   static const String appTagline = 'Your Intelligent Beach Companion';
 
-  // Companion messages
   static const String batteryChargingWell = 'Battery charging well ☀️';
   static const String strongSunlight = 'Strong sunlight detected';
   static const String lowBattery = 'Battery running low 🔋';
@@ -50,6 +45,7 @@ class AppStrings {
 class RouteNames {
   const RouteNames._();
 
+  static const String splash = 'splash';
   static const String onboarding = 'onboarding';
   static const String dashboard = 'dashboard';
   static const String lighting = 'lighting';
@@ -64,6 +60,7 @@ class RouteNames {
 class RoutePaths {
   const RoutePaths._();
 
+  static const String splash = '/splash';
   static const String onboarding = '/onboarding';
   static const String dashboard = '/';
   static const String lighting = '/lighting';

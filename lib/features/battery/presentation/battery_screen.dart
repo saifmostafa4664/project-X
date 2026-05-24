@@ -34,17 +34,21 @@ class BatteryScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Battery & Solar'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
+      backgroundColor:
+          isDark ? AppColors.darkBackground : AppColors.lightBackground,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: _BatteryHeader(
+              isDark: isDark,
+              batteryColor: batteryColor,
+              percentage: battery.percentage,
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
             // Battery Level Card
             Container(
               width: double.infinity,
@@ -303,8 +307,10 @@ class BatteryScreen extends ConsumerWidget {
             ).animate().fadeIn(duration: 500.ms, delay: 300.ms),
 
             const SizedBox(height: 40),
-          ],
-        ),
+              ]),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -427,6 +433,83 @@ class _TipItem extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Battery Screen Header
+// ─────────────────────────────────────────────────────────────
+class _BatteryHeader extends StatelessWidget {
+  final bool isDark;
+  final Color batteryColor;
+  final int percentage;
+  const _BatteryHeader({
+    required this.isDark,
+    required this.batteryColor,
+    required this.percentage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final topPad = MediaQuery.of(context).padding.top;
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, topPad + 16, 20, 20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [const Color(0xFF0F1A10), const Color(0xFF0A1210)]
+              : [const Color(0xFFF0FDF4), const Color(0xFFDCFCE7)],
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [batteryColor, batteryColor.withValues(alpha: 0.7)],
+              ),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: batteryColor.withValues(alpha: 0.4),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Icon(Icons.battery_charging_full_rounded,
+                color: Colors.white, size: 22),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Battery & Solar',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: isDark ? Colors.white : const Color(0xFF14532D),
+                  ),
+                ),
+                Text(
+                  '$percentage% Charged',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: batteryColor,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
