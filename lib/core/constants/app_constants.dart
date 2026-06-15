@@ -1,7 +1,5 @@
-/// Smart Umbrella App - App Constants (updated with splash route)
 library;
 
-/// Animation durations used throughout the app
 class AnimationDurations {
   const AnimationDurations._();
 
@@ -12,7 +10,6 @@ class AnimationDurations {
   static const Duration stateChange = Duration(milliseconds: 800);
 }
 
-/// Default values for device controls
 class DefaultValues {
   const DefaultValues._();
 
@@ -23,7 +20,6 @@ class DefaultValues {
   static const double solarThreshold = 30.0;
 }
 
-/// App-wide string constants
 class AppStrings {
   const AppStrings._();
 
@@ -41,7 +37,6 @@ class AppStrings {
   static const String umbrellaClosing = 'Closing umbrella...';
 }
 
-/// Route names for navigation
 class RouteNames {
   const RouteNames._();
 
@@ -56,7 +51,6 @@ class RouteNames {
   static const String profile = 'profile';
 }
 
-/// Route paths for navigation
 class RoutePaths {
   const RoutePaths._();
 
@@ -71,7 +65,6 @@ class RoutePaths {
   static const String profile = '/profile';
 }
 
-/// Storage keys for SharedPreferences
 class StorageKeys {
   const StorageKeys._();
 

@@ -1,7 +1,3 @@
-/// Smart Umbrella App – Premium Animated Splash Screen
-///
-/// Logo animation with scale/fade/shimmer + animated progress bar
-/// Automatically navigates to dashboard after loading completes.
 library;
 
 import 'dart:math' as math;
@@ -57,10 +53,8 @@ class _SplashScreenState extends State<SplashScreen>
       curve: Curves.easeInOutCubic,
     );
 
-    // Start loading progress
     _progressCtrl.forward().then((_) {
       if (mounted) {
-        // Fade out and navigate
         Future.delayed(const Duration(milliseconds: 400), () {
           if (mounted) context.go(RoutePaths.dashboard);
         });
@@ -84,21 +78,19 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: const Color(0xFF0A0A1A),
       body: Stack(
         children: [
-          // ── Animated aurora background ──────────────────────
           AnimatedBuilder(
             animation: _bgCtrl,
+            // ignore: unnecessary_underscores
             builder: (_, __) => CustomPaint(
               size: size,
               painter: _SplashAuroraPainter(progress: _bgCtrl.value),
             ),
           ),
 
-          // ── Center content ──────────────────────────────────
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // ── Logo with glow pulse ──────────────────────
                 AnimatedBuilder(
                   animation: _pulseCtrl,
                   builder: (_, child) {
@@ -145,16 +137,15 @@ class _SplashScreenState extends State<SplashScreen>
 
                 const SizedBox(height: 36),
 
-                // ── Progress bar ──────────────────────────────
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 60),
                   child: Column(
                     children: [
                       AnimatedBuilder(
                         animation: _progressAnim,
+                        // ignore: unnecessary_underscores
                         builder: (_, __) => Column(
                           children: [
-                            // Track
                             Container(
                               height: 4,
                               width: double.infinity,
@@ -188,7 +179,6 @@ class _SplashScreenState extends State<SplashScreen>
                               ),
                             ),
                             const SizedBox(height: 16),
-                            // Percentage
                             Text(
                               '${(_progressAnim.value * 100).toInt()}%',
                               style: TextStyle(
@@ -207,7 +197,6 @@ class _SplashScreenState extends State<SplashScreen>
 
                 const SizedBox(height: 24),
 
-                // ── Loading dots ──────────────────────────────
                 _LoadingDots().animate().fadeIn(
                   delay: 1000.ms,
                   duration: 400.ms,
@@ -216,7 +205,6 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
 
-          // ── Bottom brand ──────────────────────────────────
           Positioned(
             bottom: 40 + MediaQuery.of(context).padding.bottom,
             left: 0,
@@ -237,9 +225,6 @@ class _SplashScreenState extends State<SplashScreen>
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Loading dots animation
-// ─────────────────────────────────────────────────────────────
 class _LoadingDots extends StatefulWidget {
   @override
   State<_LoadingDots> createState() => _LoadingDotsState();
@@ -268,6 +253,7 @@ class _LoadingDotsState extends State<_LoadingDots>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _ctrl,
+      // ignore: unnecessary_underscores
       builder: (_, __) {
         return Row(
           mainAxisSize: MainAxisSize.min,
@@ -297,9 +283,6 @@ class _LoadingDotsState extends State<_LoadingDots>
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Splash Aurora Background Painter
-// ─────────────────────────────────────────────────────────────
 class _SplashAuroraPainter extends CustomPainter {
   final double progress;
   const _SplashAuroraPainter({required this.progress});
@@ -308,7 +291,6 @@ class _SplashAuroraPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final t = progress * math.pi * 2;
 
-    // Background fill
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.width, size.height),
       Paint()..color = const Color(0xFF0A0A1A),
@@ -332,7 +314,6 @@ class _SplashAuroraPainter extends CustomPainter {
       canvas.drawCircle(Offset(bx, by), r, paint);
     }
 
-    // Purple blob top-left
     drawBlob(
       size.width * 0.2 + math.sin(t * 0.5) * 40,
       size.height * 0.25 + math.cos(t * 0.4) * 30,
@@ -341,7 +322,6 @@ class _SplashAuroraPainter extends CustomPainter {
       0.18,
     );
 
-    // Teal blob top-right
     drawBlob(
       size.width * 0.85 + math.cos(t * 0.6) * 30,
       size.height * 0.2 + math.sin(t * 0.5) * 25,
@@ -350,7 +330,6 @@ class _SplashAuroraPainter extends CustomPainter {
       0.14,
     );
 
-    // Amber blob bottom
     drawBlob(
       size.width * 0.5 + math.sin(t * 0.8) * 20,
       size.height * 0.75 + math.cos(t * 0.7) * 20,
@@ -359,7 +338,6 @@ class _SplashAuroraPainter extends CustomPainter {
       0.10,
     );
 
-    // Deep purple bottom-left
     drawBlob(
       size.width * 0.15 + math.cos(t * 0.9) * 15,
       size.height * 0.8 + math.sin(t * 0.6) * 20,

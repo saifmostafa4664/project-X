@@ -1,7 +1,3 @@
-/// Smart Umbrella App - Battery Provider
-///
-/// Riverpod providers for battery and solar monitoring including
-/// percentage, charging status, and companion messages.
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,52 +5,44 @@ import '../device/models/umbrella_state.dart';
 import '../core/constants/app_constants.dart';
 import 'device_provider.dart';
 
-/// Provider for current battery state
 final batteryStateProvider = Provider<BatteryState>((ref) {
   final asyncState = ref.watch(deviceStateStreamProvider);
   return asyncState.when(
     data: (state) => state.battery,
     loading: () => const BatteryState(),
+    // ignore: unnecessary_underscores
     error: (_, __) => const BatteryState(),
   );
 });
 
-/// Provider for battery percentage
 final batteryPercentageProvider = Provider<int>((ref) {
   return ref.watch(batteryStateProvider).percentage;
 });
 
-/// Provider for charging status
 final chargingStatusProvider = Provider<ChargingStatus>((ref) {
   return ref.watch(batteryStateProvider).chargingStatus;
 });
 
-/// Provider for solar power output
 final solarPowerProvider = Provider<double>((ref) {
   return ref.watch(batteryStateProvider).solarPowerWatts;
 });
 
-/// Provider for solar active status
 final isSolarActiveProvider = Provider<bool>((ref) {
   return ref.watch(batteryStateProvider).isSolarActive;
 });
 
-/// Provider for low battery warning
 final isLowBatteryProvider = Provider<bool>((ref) {
   return ref.watch(batteryStateProvider).isLow;
 });
 
-/// Provider for critical battery warning
 final isCriticalBatteryProvider = Provider<bool>((ref) {
   return ref.watch(batteryStateProvider).isCritical;
 });
 
-/// Provider for strong sunlight detection
 final hasStrongSunlightProvider = Provider<bool>((ref) {
   return ref.watch(batteryStateProvider).hasStrongSunlight;
 });
 
-/// Provider for companion messages based on current state
 final companionMessagesProvider = Provider<List<CompanionMessage>>((ref) {
   final battery = ref.watch(batteryStateProvider);
   final lighting = ref
@@ -62,13 +50,13 @@ final companionMessagesProvider = Provider<List<CompanionMessage>>((ref) {
       .when(
         data: (state) => state.lighting,
         loading: () => const LightingState(),
+        // ignore: unnecessary_underscores
         error: (_, __) => const LightingState(),
       );
 
   final messages = <CompanionMessage>[];
   final now = DateTime.now();
 
-  // Battery charging well
   if (battery.chargingStatus == ChargingStatus.charging &&
       battery.solarPowerWatts > 20) {
     messages.add(
@@ -80,7 +68,6 @@ final companionMessagesProvider = Provider<List<CompanionMessage>>((ref) {
     );
   }
 
-  // Strong sunlight detected
   if (battery.hasStrongSunlight) {
     messages.add(
       CompanionMessage(
@@ -91,7 +78,6 @@ final companionMessagesProvider = Provider<List<CompanionMessage>>((ref) {
     );
   }
 
-  // Low battery warning
   if (battery.isLow && !battery.isCritical) {
     messages.add(
       CompanionMessage(
@@ -102,7 +88,6 @@ final companionMessagesProvider = Provider<List<CompanionMessage>>((ref) {
     );
   }
 
-  // Critical battery
   if (battery.isCritical) {
     messages.add(
       CompanionMessage(
@@ -113,7 +98,6 @@ final companionMessagesProvider = Provider<List<CompanionMessage>>((ref) {
     );
   }
 
-  // Power saving suggestion
   if (battery.isLow && lighting.isOn) {
     messages.add(
       CompanionMessage(
@@ -127,12 +111,10 @@ final companionMessagesProvider = Provider<List<CompanionMessage>>((ref) {
   return messages;
 });
 
-/// Provider for the most important companion message to display
 final primaryCompanionMessageProvider = Provider<CompanionMessage?>((ref) {
   final messages = ref.watch(companionMessagesProvider);
   if (messages.isEmpty) return null;
 
-  // Priority: error > warning > tip > info > success
   const priority = [
     CompanionMessageType.error,
     CompanionMessageType.warning,
@@ -149,7 +131,6 @@ final primaryCompanionMessageProvider = Provider<CompanionMessage?>((ref) {
   return messages.first;
 });
 
-/// Provider for battery icon based on percentage and charging status
 final batteryIconDataProvider = Provider<BatteryIconData>((ref) {
   final percentage = ref.watch(batteryPercentageProvider);
   final status = ref.watch(chargingStatusProvider);
@@ -176,7 +157,6 @@ final batteryIconDataProvider = Provider<BatteryIconData>((ref) {
   );
 });
 
-/// Data class for battery icon display
 class BatteryIconData {
   final String iconName;
   final bool isCharging;

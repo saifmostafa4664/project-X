@@ -1,10 +1,9 @@
-/// Smart Umbrella App – Premium Dashboard Screen
-/// v2: Floating island nav, aurora header, profile integration, parallax
 library;
 
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
+// ignore: unnecessary_import
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -66,16 +65,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final profile = ref.watch(userProfileProvider);
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.darkBackground : AppColors.lightBackground,
+      backgroundColor: isDark
+          ? AppColors.darkBackground
+          : AppColors.lightBackground,
       body: Stack(
         children: [
-          // ── Scrollable content ─────────────────────────────
           CustomScrollView(
             controller: _scrollCtrl,
             physics: const BouncingScrollPhysics(),
             slivers: [
-              // ── Aurora Header ──────────────────────────────
               SliverAppBar(
                 expandedHeight: 140,
                 floating: false,
@@ -97,31 +95,30 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 ),
               ),
 
-              // ── Environment Strip ─────────────────────────
               SliverToBoxAdapter(
                 child: Transform.translate(
                   offset: Offset(0, -_scrollOffset * 0.04),
-                  child: _EnvironmentStrip(
-                    battery: battery.percentage,
-                    isConnected: isConnected,
-                  )
-                      .animate()
-                      .fadeIn(duration: 400.ms)
-                      .slideY(begin: -0.15, end: 0),
+                  child:
+                      _EnvironmentStrip(
+                            battery: battery.percentage,
+                            isConnected: isConnected,
+                          )
+                          .animate()
+                          .fadeIn(duration: 400.ms)
+                          .slideY(begin: -0.15, end: 0),
                 ),
               ),
 
-              // ── Companion Message ──────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const CompanionMessageBanner()
-                      .animate()
-                      .fadeIn(delay: 100.ms, duration: 400.ms),
+                  child: const CompanionMessageBanner().animate().fadeIn(
+                    delay: 100.ms,
+                    duration: 400.ms,
+                  ),
                 ),
               ),
 
-              // ── Umbrella Hero Card ─────────────────────────
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 sliver: SliverToBoxAdapter(
@@ -132,7 +129,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 ),
               ),
 
-              // ── Battery Card ───────────────────────────────
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 sliver: SliverToBoxAdapter(
@@ -143,17 +139,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 ),
               ),
 
-              // ── Stats Row ─────────────────────────────────
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 sliver: SliverToBoxAdapter(
-                  child: _StatsRow(isConnected: isConnected, profile: profile)
-                      .animate()
-                      .fadeIn(delay: 280.ms, duration: 500.ms),
+                  child: _StatsRow(
+                    isConnected: isConnected,
+                    profile: profile,
+                  ).animate().fadeIn(delay: 280.ms, duration: 500.ms),
                 ),
               ),
 
-              // ── Quick Controls ─────────────────────────────
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 sliver: SliverToBoxAdapter(
@@ -203,7 +198,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 
   Widget _buildLightingCard(
-      BuildContext context, WidgetRef ref, bool isConnected) {
+    BuildContext context,
+    WidgetRef ref,
+    bool isConnected,
+  ) {
     final lighting = ref.watch(lightingStateProvider);
     return QuickControlCard(
       title: 'Lighting',
@@ -224,7 +222,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 
   Widget _buildSoundCard(
-      BuildContext context, WidgetRef ref, bool isConnected) {
+    BuildContext context,
+    WidgetRef ref,
+    bool isConnected,
+  ) {
     final sound = ref.watch(soundStateProvider);
     return QuickControlCard(
       title: 'Sound',
@@ -245,9 +246,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Aurora Header
-// ─────────────────────────────────────────────────────────────
 class _AuroraHeader extends StatelessWidget {
   final AnimationController auroraCtrl;
   final bool isDark;
@@ -275,7 +273,6 @@ class _AuroraHeader extends StatelessWidget {
       animation: auroraCtrl,
       builder: (ctx, _) => Stack(
         children: [
-          // Aurora blobs background
           ClipRect(
             child: CustomPaint(
               size: Size(MediaQuery.of(ctx).size.width, 140),
@@ -285,12 +282,10 @@ class _AuroraHeader extends StatelessWidget {
               ),
             ),
           ),
-          // Frosted overlay
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
             child: Container(color: Colors.transparent),
           ),
-          // Content
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
@@ -299,10 +294,11 @@ class _AuroraHeader extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      // App logo chip
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           gradient: AppColors.heroGradient,
                           borderRadius: BorderRadius.circular(20),
@@ -317,8 +313,11 @@ class _AuroraHeader extends StatelessWidget {
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.beach_access_rounded,
-                                color: Colors.white, size: 16),
+                            Icon(
+                              Icons.beach_access_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            ),
                             SizedBox(width: 6),
                             Text(
                               AppStrings.appName,
@@ -332,11 +331,12 @@ class _AuroraHeader extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      // Connection badge
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
                         decoration: BoxDecoration(
                           color: isConnected
                               ? AppColors.success.withValues(alpha: 0.12)
@@ -352,17 +352,16 @@ class _AuroraHeader extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                color: isConnected
-                                    ? AppColors.success
-                                    : AppColors.error,
-                                shape: BoxShape.circle,
-                              ),
-                            )
-                                .animate(
-                                    onPlay: (c) => c.repeat(reverse: true))
+                                  width: 6,
+                                  height: 6,
+                                  decoration: BoxDecoration(
+                                    color: isConnected
+                                        ? AppColors.success
+                                        : AppColors.error,
+                                    shape: BoxShape.circle,
+                                  ),
+                                )
+                                .animate(onPlay: (c) => c.repeat(reverse: true))
                                 .scale(
                                   begin: const Offset(0.8, 0.8),
                                   end: const Offset(1.2, 1.2),
@@ -383,7 +382,6 @@ class _AuroraHeader extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Settings
                       Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -434,7 +432,6 @@ class _AuroraHeader extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // Profile avatar button
                       GestureDetector(
                         onTap: onProfileTap,
                         child: Container(
@@ -445,8 +442,7 @@ class _AuroraHeader extends StatelessWidget {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    AppColors.primary.withValues(alpha: 0.4),
+                                color: AppColors.primary.withValues(alpha: 0.4),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -472,9 +468,6 @@ class _AuroraHeader extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Aurora Painter
-// ─────────────────────────────────────────────────────────────
 class _AuroraPainter extends CustomPainter {
   final double progress;
   final bool isDark;
@@ -488,49 +481,61 @@ class _AuroraPainter extends CustomPainter {
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.width, size.height),
       Paint()
-        ..color = isDark
-            ? AppColors.darkBackground
-            : AppColors.lightBackground,
+        ..color = isDark ? AppColors.darkBackground : AppColors.lightBackground,
     );
 
-    void drawBlob(double bx, double by, double r1, double r2, Color col, double alpha) {
+    void drawBlob(
+      double bx,
+      double by,
+      double r1,
+      double r2,
+      Color col,
+      double alpha,
+    ) {
       final paint = Paint()
-        ..shader = RadialGradient(
-          colors: [col.withValues(alpha: alpha), col.withValues(alpha: 0.0)],
-        ).createShader(
-          Rect.fromCenter(
-              center: Offset(bx, by), width: r1 * 2, height: r2 * 2),
-        )
+        ..shader =
+            RadialGradient(
+              colors: [
+                col.withValues(alpha: alpha),
+                col.withValues(alpha: 0.0),
+              ],
+            ).createShader(
+              Rect.fromCenter(
+                center: Offset(bx, by),
+                width: r1 * 2,
+                height: r2 * 2,
+              ),
+            )
         ..blendMode = BlendMode.srcOver;
       canvas.drawOval(
-          Rect.fromCenter(
-              center: Offset(bx, by), width: r1 * 2, height: r2 * 2),
-          paint);
+        Rect.fromCenter(center: Offset(bx, by), width: r1 * 2, height: r2 * 2),
+        paint,
+      );
     }
 
-    // Red blob – top left drifting
     drawBlob(
       size.width * 0.15 + math.sin(t * 0.7) * 30,
       size.height * 0.3 + math.cos(t * 0.5) * 20,
-      130, 90,
+      130,
+      90,
       AppColors.primary,
       isDark ? 0.22 : 0.14,
     );
 
-    // Teal blob – top right drifting
     drawBlob(
       size.width * 0.8 + math.cos(t * 0.6) * 25,
       size.height * 0.2 + math.sin(t * 0.8) * 18,
-      110, 80,
+      110,
+      80,
       AppColors.teal,
       isDark ? 0.18 : 0.12,
     );
 
-    // Small accent blob center
     drawBlob(
       size.width * 0.5 + math.sin(t * 1.1) * 20,
       size.height * 0.6 + math.cos(t * 0.9) * 12,
-      70, 50,
+      70,
+      50,
       AppColors.amber,
       isDark ? 0.10 : 0.07,
     );
@@ -541,17 +546,11 @@ class _AuroraPainter extends CustomPainter {
       old.progress != progress || old.isDark != isDark;
 }
 
-// ─────────────────────────────────────────────────────────────
-// Floating Island Nav Bar
-// ─────────────────────────────────────────────────────────────
 class _FloatingIslandNav extends StatefulWidget {
   final int selectedIndex;
   final void Function(int) onTap;
 
-  const _FloatingIslandNav({
-    required this.selectedIndex,
-    required this.onTap,
-  });
+  const _FloatingIslandNav({required this.selectedIndex, required this.onTap});
 
   @override
   State<_FloatingIslandNav> createState() => _FloatingIslandNavState();
@@ -565,7 +564,9 @@ class _FloatingIslandNavState extends State<_FloatingIslandNav>
   void initState() {
     super.initState();
     _indicatorCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 280));
+      vsync: this,
+      duration: const Duration(milliseconds: 280),
+    );
   }
 
   @override
@@ -578,7 +579,11 @@ class _FloatingIslandNavState extends State<_FloatingIslandNav>
     (Icons.home_rounded, Icons.home_outlined, 'Home'),
     (Icons.lightbulb_rounded, Icons.lightbulb_outline_rounded, 'Lights'),
     (Icons.music_note_rounded, Icons.music_note_outlined, 'Sound'),
-    (Icons.battery_charging_full_rounded, Icons.battery_charging_full_outlined, 'Battery'),
+    (
+      Icons.battery_charging_full_rounded,
+      Icons.battery_charging_full_outlined,
+      'Battery',
+    ),
   ];
 
   @override
@@ -666,10 +671,13 @@ class _IslandNavItemState extends State<_IslandNavItem>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 220));
-    _scaleAnim = Tween<double>(begin: 1.0, end: 0.88).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
     );
+    _scaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.88,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -680,10 +688,9 @@ class _IslandNavItemState extends State<_IslandNavItem>
 
   @override
   Widget build(BuildContext context) {
-    final activeColor =
-        widget.isDark ? AppColors.primaryLight : AppColors.primary;
-    final inactiveColor =
-        widget.isDark ? AppColors.slate500 : AppColors.slate400;
+    final inactiveColor = widget.isDark
+        ? AppColors.slate500
+        : AppColors.slate400;
 
     return GestureDetector(
       onTapDown: (_) => _ctrl.forward(),
@@ -698,11 +705,11 @@ class _IslandNavItemState extends State<_IslandNavItem>
           duration: const Duration(milliseconds: 240),
           curve: Curves.easeOutBack,
           padding: EdgeInsets.symmetric(
-              horizontal: widget.isSelected ? 20 : 14, vertical: 8),
+            horizontal: widget.isSelected ? 20 : 14,
+            vertical: 8,
+          ),
           decoration: BoxDecoration(
-            gradient: widget.isSelected
-                ? AppColors.heroGradient
-                : null,
+            gradient: widget.isSelected ? AppColors.heroGradient : null,
             color: widget.isSelected ? null : Colors.transparent,
             borderRadius: BorderRadius.circular(22),
             boxShadow: widget.isSelected
@@ -747,17 +754,11 @@ class _IslandNavItemState extends State<_IslandNavItem>
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Environment Strip
-// ─────────────────────────────────────────────────────────────
 class _EnvironmentStrip extends StatelessWidget {
   final int battery;
   final bool isConnected;
 
-  const _EnvironmentStrip({
-    required this.battery,
-    required this.isConnected,
-  });
+  const _EnvironmentStrip({required this.battery, required this.isConnected});
 
   @override
   Widget build(BuildContext context) {
@@ -811,10 +812,10 @@ class _EnvironmentStrip extends StatelessWidget {
   }
 
   Widget _divider(bool isDark) => Container(
-        height: 30,
-        width: 1,
-        color: isDark ? AppColors.slate700 : AppColors.slate200,
-      );
+    height: 30,
+    width: 1,
+    color: isDark ? AppColors.slate700 : AppColors.slate200,
+  );
 }
 
 class _EnvItem extends StatelessWidget {
@@ -857,9 +858,6 @@ class _EnvItem extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Stats Row
-// ─────────────────────────────────────────────────────────────
 class _StatsRow extends StatelessWidget {
   final bool isConnected;
   final UserProfile profile;
@@ -870,7 +868,9 @@ class _StatsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final mins = profile.totalUsageMinutes;
-    final timeLabel = mins < 60 ? '${mins}m' : '${mins ~/ 60}h${mins % 60 > 0 ? ' ${mins % 60}m' : ''}';
+    final timeLabel = mins < 60
+        ? '${mins}m'
+        : '${mins ~/ 60}h${mins % 60 > 0 ? ' ${mins % 60}m' : ''}';
 
     return Row(
       children: [

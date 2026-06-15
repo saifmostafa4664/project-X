@@ -1,4 +1,3 @@
-/// Smart Umbrella App - Premium Umbrella Control Card Widget
 library;
 
 import 'package:flutter/material.dart';
@@ -56,7 +55,6 @@ class UmbrellaControlCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(28),
         child: Stack(
           children: [
-            // Background decoration circles
             Positioned(
               right: -30,
               top: -30,
@@ -82,15 +80,12 @@ class UmbrellaControlCard extends ConsumerWidget {
               ),
             ),
 
-            // Content
             Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
-                  // Status Row
                   Row(
                     children: [
-                      // Icon
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         width: 60,
@@ -187,7 +182,6 @@ class UmbrellaControlCard extends ConsumerWidget {
 
                   const SizedBox(height: 12),
 
-                  // ── 3D Umbrella Viewer ──────────────────
                   Umbrella3DViewer(
                     openProgress: openProgress,
                     lightOn: lighting.isOn,
@@ -196,7 +190,6 @@ class UmbrellaControlCard extends ConsumerWidget {
 
                   const SizedBox(height: 12),
 
-                  // Status indicator bar
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
@@ -213,7 +206,6 @@ class UmbrellaControlCard extends ConsumerWidget {
 
                   const SizedBox(height: 16),
 
-                  // Control Buttons
                   Row(
                     children: [
                       Expanded(

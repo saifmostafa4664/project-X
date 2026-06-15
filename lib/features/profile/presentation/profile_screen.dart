@@ -1,4 +1,3 @@
-/// Smart Umbrella – User Profile Screen
 library;
 
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool _editingName = false;
   late TextEditingController _nameCtrl;
 
-  // Available avatar emojis
   static const _avatarEmojis = [
     '🏖️', '☂️', '🌊', '🏄', '🌞', '🐚', '⛵', '🦀',
     '🐠', '🐬', '🦈', '🌺', '🍹', '🎯', '🎪', '🚀',
@@ -49,7 +47,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── App Bar ─────────────────────────────────────────
           SliverAppBar(
             expandedHeight: 220,
             pinned: true,
@@ -67,7 +64,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
                 child: Stack(
                   children: [
-                    // Decorative circles
                     Positioned(
                       right: -40,
                       top: -40,
@@ -92,14 +88,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ),
                     ),
-                    // Avatar + name
                     Positioned.fill(
                       child: SafeArea(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const SizedBox(height: 32),
-                            // Avatar
                             GestureDetector(
                               onTap: () => _showAvatarPicker(context, profile),
                               child: Container(
@@ -122,7 +116,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            // Name
                             _editingName
                                 ? SizedBox(
                                     width: 200,
@@ -195,7 +188,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
           ),
 
-          // ── Stats ────────────────────────────────────────────
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
             sliver: SliverToBoxAdapter(
@@ -239,7 +231,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
           ),
 
-          // ── Recent Sessions ──────────────────────────────────
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
             sliver: SliverToBoxAdapter(
@@ -272,7 +263,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
           ),
 
-          // ── Demo Session Button ──────────────────────────────
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
             sliver: SliverToBoxAdapter(
@@ -428,9 +418,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Stat Card
-// ─────────────────────────────────────────────────────────────
 class _StatCard extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -483,9 +470,6 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Session Tile
-// ─────────────────────────────────────────────────────────────
 class _SessionTile extends StatelessWidget {
   final SessionRecord session;
   final bool isDark;
@@ -581,9 +565,6 @@ class _SessionTile extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Empty Sessions Card
-// ─────────────────────────────────────────────────────────────
 class _EmptySessionsCard extends StatelessWidget {
   final bool isDark;
   const _EmptySessionsCard({required this.isDark});

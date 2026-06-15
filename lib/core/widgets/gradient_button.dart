@@ -1,4 +1,3 @@
-/// Gradient primary button with shimmer animation.
 library;
 
 import 'package:flutter/material.dart';

@@ -1,4 +1,3 @@
-/// Smart Umbrella App - Premium Quick Control Card Widget
 library;
 
 import 'package:flutter/material.dart';
@@ -51,11 +50,11 @@ class _QuickControlCardState extends State<QuickControlCard> {
           decoration: BoxDecoration(
             color: isDark
                 ? (widget.isActive
-                    ? color.withValues(alpha: 0.12)
-                    : AppColors.darkSurface)
+                      ? color.withValues(alpha: 0.12)
+                      : AppColors.darkSurface)
                 : (widget.isActive
-                    ? color.withValues(alpha: 0.07)
-                    : AppColors.lightSurface),
+                      ? color.withValues(alpha: 0.07)
+                      : AppColors.lightSurface),
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
               color: widget.isActive
@@ -69,7 +68,7 @@ class _QuickControlCardState extends State<QuickControlCard> {
                       color: color.withValues(alpha: 0.18),
                       blurRadius: 16,
                       offset: const Offset(0, 6),
-                    )
+                    ),
                   ]
                 : [
                     if (!isDark)
@@ -77,7 +76,7 @@ class _QuickControlCardState extends State<QuickControlCard> {
                         color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
-                      )
+                      ),
                   ],
           ),
           child: Padding(
@@ -85,11 +84,9 @@ class _QuickControlCardState extends State<QuickControlCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icon + toggle row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Icon with animated glow container
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 250),
                       width: 50,
@@ -98,21 +95,20 @@ class _QuickControlCardState extends State<QuickControlCard> {
                         color: widget.isActive
                             ? color.withValues(alpha: 0.18)
                             : (isDark
-                                ? AppColors.slate800
-                                : AppColors.slate100),
+                                  ? AppColors.slate800
+                                  : AppColors.slate100),
                         borderRadius: BorderRadius.circular(14),
                         boxShadow: widget.isActive
                             ? [
                                 BoxShadow(
                                   color: color.withValues(alpha: 0.25),
                                   blurRadius: 10,
-                                )
+                                ),
                               ]
                             : [],
                       ),
                       child: Icon(widget.icon, color: color, size: 26),
                     ),
-                    // Custom animated toggle
                     _PremiumToggle(
                       isActive: widget.isActive,
                       activeColor: color,
@@ -123,9 +119,9 @@ class _QuickControlCardState extends State<QuickControlCard> {
                 const SizedBox(height: 14),
                 Text(
                   widget.title,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 3),
                 Text(
@@ -194,6 +190,7 @@ class _PremiumToggleState extends State<_PremiumToggle>
       onTap: widget.onTap,
       child: AnimatedBuilder(
         animation: _controller,
+        // ignore: unnecessary_underscores
         builder: (_, __) {
           final t = _controller.value;
           final bg = Color.lerp(
@@ -214,7 +211,7 @@ class _PremiumToggleState extends State<_PremiumToggle>
                         color: widget.activeColor.withValues(alpha: 0.35),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
-                      )
+                      ),
                     ]
                   : [],
             ),
@@ -236,7 +233,7 @@ class _PremiumToggleState extends State<_PremiumToggle>
                       color: Colors.black.withValues(alpha: 0.18),
                       blurRadius: 4,
                       offset: const Offset(0, 1),
-                    )
+                    ),
                   ],
                 ),
               ),

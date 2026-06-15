@@ -1,4 +1,3 @@
-/// Animated pulsing status dot for connection/activity indicators.
 library;
 
 import 'package:flutter/material.dart';

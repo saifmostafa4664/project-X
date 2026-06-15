@@ -1,7 +1,3 @@
-/// Smart Umbrella App - Premium Theme Configuration
-///
-/// Violet-Indigo × Teal × Rose design system.
-/// Full light and dark themes with Material 3.
 library;
 
 import 'package:flutter/material.dart';
@@ -11,10 +7,6 @@ import 'app_colors.dart';
 
 class AppTheme {
   const AppTheme._();
-
-  // ============================================================
-  // LIGHT THEME
-  // ============================================================
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -46,10 +38,6 @@ class AppTheme {
     );
   }
 
-  // ============================================================
-  // DARK THEME
-  // ============================================================
-
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
@@ -79,10 +67,6 @@ class AppTheme {
       ),
     );
   }
-
-  // ============================================================
-  // COLOR SCHEMES
-  // ============================================================
 
   static const ColorScheme _lightColorScheme = ColorScheme.light(
     primary: AppColors.primary,
@@ -130,10 +114,6 @@ class AppTheme {
     outlineVariant: AppColors.slate700,
   );
 
-  // ============================================================
-  // TEXT THEMES
-  // ============================================================
-
   static TextTheme get _lightTextTheme {
     return GoogleFonts.outfitTextTheme().copyWith(
       displayLarge: GoogleFonts.outfit(fontSize: 57, fontWeight: FontWeight.w400, color: AppColors.slate900),
@@ -174,10 +154,6 @@ class AppTheme {
     );
   }
 
-  // ============================================================
-  // APP BAR
-  // ============================================================
-
   static const AppBarTheme _lightAppBarTheme = AppBarTheme(
     elevation: 0,
     scrolledUnderElevation: 0,
@@ -196,10 +172,6 @@ class AppTheme {
     systemOverlayStyle: SystemUiOverlayStyle.light,
   );
 
-  // ============================================================
-  // CARDS
-  // ============================================================
-
   static CardThemeData get _lightCardTheme => CardThemeData(
     elevation: 0,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -214,10 +186,6 @@ class AppTheme {
     color: AppColors.darkSurface,
     surfaceTintColor: Colors.transparent,
   );
-
-  // ============================================================
-  // BUTTONS
-  // ============================================================
 
   static ElevatedButtonThemeData get _lightElevatedButtonTheme =>
       ElevatedButtonThemeData(
@@ -283,10 +251,6 @@ class AppTheme {
     ),
   );
 
-  // ============================================================
-  // SLIDERS
-  // ============================================================
-
   static SliderThemeData get _lightSliderTheme => SliderThemeData(
     activeTrackColor: AppColors.primary,
     inactiveTrackColor: AppColors.slate200,
@@ -307,10 +271,6 @@ class AppTheme {
     overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
   );
 
-  // ============================================================
-  // SWITCHES
-  // ============================================================
-
   static SwitchThemeData get _lightSwitchTheme => SwitchThemeData(
     thumbColor: WidgetStateProperty.resolveWith((states) {
       return states.contains(WidgetState.selected) ? Colors.white : AppColors.slate400;
@@ -330,10 +290,6 @@ class AppTheme {
     }),
     trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
   );
-
-  // ============================================================
-  // NAVIGATION BAR (pill style)
-  // ============================================================
 
   static NavigationBarThemeData get _lightNavigationBarTheme =>
       NavigationBarThemeData(
@@ -391,10 +347,6 @@ class AppTheme {
         }),
       );
 
-  // ============================================================
-  // FAB
-  // ============================================================
-
   static FloatingActionButtonThemeData get _fabTheme =>
       FloatingActionButtonThemeData(
         backgroundColor: AppColors.primary,
@@ -402,10 +354,6 @@ class AppTheme {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       );
-
-  // ============================================================
-  // SNACK BARS
-  // ============================================================
 
   static SnackBarThemeData get _lightSnackBarTheme => SnackBarThemeData(
     behavior: SnackBarBehavior.floating,
@@ -420,10 +368,6 @@ class AppTheme {
     backgroundColor: AppColors.darkSurfaceElevated,
     contentTextStyle: GoogleFonts.outfit(fontSize: 14, color: AppColors.slate100),
   );
-
-  // ============================================================
-  // CHIPS
-  // ============================================================
 
   static ChipThemeData get _lightChipTheme => ChipThemeData(
     backgroundColor: AppColors.slate100,
@@ -442,10 +386,6 @@ class AppTheme {
     side: BorderSide.none,
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
   );
-
-  // ============================================================
-  // INPUT DECORATION
-  // ============================================================
 
   static InputDecorationTheme get _lightInputTheme => InputDecorationTheme(
     filled: true,

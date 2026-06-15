@@ -1,46 +1,28 @@
-/// Smart Umbrella App - Umbrella State Models
-///
-/// Immutable state models representing the complete state of the
-/// smart umbrella device including umbrella position, battery status,
-/// lighting configuration, and sound system state.
 library;
 
 import 'package:flutter/material.dart';
 
-/// Represents the current position/state of the umbrella
 enum UmbrellaPosition { open, closed, opening, closing }
 
-/// Battery charging status
 enum ChargingStatus { charging, discharging, full, notConnected }
 
-/// RGB lighting mode
 enum LightingMode { off, static, ambient, party }
 
-/// Connection status to the physical device
 enum ConnectionStatus { connected, connecting, disconnected, error }
 
-/// Complete state of the umbrella device
-/// Immutable class for predictable state management
 class UmbrellaDeviceState {
-  /// Umbrella physical position
   final UmbrellaPosition umbrellaPosition;
 
-  /// Connection status to device
   final ConnectionStatus connectionStatus;
 
-  /// Battery state information
   final BatteryState battery;
 
-  /// RGB lighting state
   final LightingState lighting;
 
-  /// Sound system state
   final SoundState sound;
 
-  /// Last update timestamp
   final DateTime lastUpdated;
 
-  /// Whether simulation mode is active
   final bool isSimulationMode;
 
   const UmbrellaDeviceState({
@@ -53,7 +35,6 @@ class UmbrellaDeviceState {
     this.isSimulationMode = true,
   });
 
-  /// Creates a copy with modified fields
   UmbrellaDeviceState copyWith({
     UmbrellaPosition? umbrellaPosition,
     ConnectionStatus? connectionStatus,
@@ -74,38 +55,28 @@ class UmbrellaDeviceState {
     );
   }
 
-  /// Default initial state for the app
   factory UmbrellaDeviceState.initial() {
     return UmbrellaDeviceState(lastUpdated: DateTime.now());
   }
 
-  /// Check if umbrella is in a transitional state
   bool get isTransitioning =>
       umbrellaPosition == UmbrellaPosition.opening ||
       umbrellaPosition == UmbrellaPosition.closing;
 
-  /// Check if device is connected and operational
   bool get isOperational => connectionStatus == ConnectionStatus.connected;
 }
 
-/// Battery and solar panel state
 class BatteryState {
-  /// Current battery percentage (0-100)
   final int percentage;
 
-  /// Current charging status
   final ChargingStatus chargingStatus;
 
-  /// Solar panel power output in watts
   final double solarPowerWatts;
 
-  /// Whether solar panel is actively charging
   final bool isSolarActive;
 
-  /// Estimated time to full charge in minutes (null if not charging)
   final int? minutesToFull;
 
-  /// Estimated remaining runtime in minutes (null if charging)
   final int? minutesRemaining;
 
   const BatteryState({
@@ -135,28 +106,20 @@ class BatteryState {
     );
   }
 
-  /// Check if battery is low (<= 20%)
   bool get isLow => percentage <= 20;
 
-  /// Check if battery is critical (<= 10%)
   bool get isCritical => percentage <= 10;
 
-  /// Check if receiving strong sunlight (>30W)
   bool get hasStrongSunlight => solarPowerWatts > 30.0;
 }
 
-/// RGB lighting system state
 class LightingState {
-  /// Whether lights are on
   final bool isOn;
 
-  /// Current RGB color
   final Color color;
 
-  /// Brightness level (0-100)
   final int brightness;
 
-  /// Current lighting mode
   final LightingMode mode;
 
   const LightingState({
@@ -180,7 +143,6 @@ class LightingState {
     );
   }
 
-  /// Get color with brightness applied
   Color get effectiveColor {
     if (!isOn) return const Color(0x00000000);
     final factor = brightness / 100;
@@ -193,18 +155,13 @@ class LightingState {
   }
 }
 
-/// Sound system state
 class SoundState {
-  /// Whether music is currently playing
   final bool isPlaying;
 
-  /// Current volume level (0-100)
   final int volume;
 
-  /// Current track name (if available)
   final String? currentTrack;
 
-  /// Whether sound system is available/connected
   final bool isAvailable;
 
   const SoundState({
@@ -229,7 +186,6 @@ class SoundState {
   }
 }
 
-/// Companion message for contextual user feedback
 class CompanionMessage {
   final String message;
   final CompanionMessageType type;
@@ -242,5 +198,4 @@ class CompanionMessage {
   });
 }
 
-/// Types of companion messages
 enum CompanionMessageType { info, success, warning, error, tip }

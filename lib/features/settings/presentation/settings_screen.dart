@@ -1,4 +1,3 @@
-/// Smart Umbrella App - Premium Settings Screen
 library;
 
 import 'package:flutter/material.dart';
@@ -33,7 +32,6 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          // ── App Info ─────────────────────────────────────────
           _SectionHeader(label: 'App', isDark: isDark),
           _InfoTile(isDark: isDark)
               .animate()
@@ -42,7 +40,6 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
-          // ── Appearance ───────────────────────────────────────
           _SectionHeader(label: 'Appearance', isDark: isDark),
           _ThemeSelector(
             themeMode: themeMode,
@@ -56,7 +53,6 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
-          // ── Connection ───────────────────────────────────────
           _SectionHeader(label: 'Connection', isDark: isDark),
           _PremiumTile(
             icon: Icons.developer_mode_rounded,
@@ -94,7 +90,6 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
-          // ── About ────────────────────────────────────────────
           _SectionHeader(label: 'About', isDark: isDark),
           _PremiumTile(
             icon: Icons.info_outline_rounded,
@@ -202,9 +197,6 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Section Header
-// ─────────────────────────────────────────────────────────────
 class _SectionHeader extends StatelessWidget {
   final String label;
   final bool isDark;
@@ -241,9 +233,6 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// App Info Tile
-// ─────────────────────────────────────────────────────────────
 class _InfoTile extends StatelessWidget {
   final bool isDark;
 
@@ -303,9 +292,6 @@ class _InfoTile extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Theme Selector (Segmented)
-// ─────────────────────────────────────────────────────────────
 class _ThemeSelector extends StatelessWidget {
   final ThemeMode themeMode;
   final bool isDark;
@@ -474,9 +460,6 @@ class _ThemeChip extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Premium Tile
-// ─────────────────────────────────────────────────────────────
 class _PremiumTile extends StatefulWidget {
   final IconData icon;
   final Color iconColor;

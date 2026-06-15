@@ -1,7 +1,3 @@
-/// Smart Umbrella App – App Shell with Persistent Floating Island Nav Bar
-///
-/// This shell wraps all main screens and provides the persistent nav bar.
-/// Uses GoRouter's StatefulShellRoute location to track the active tab.
 library;
 
 import 'dart:ui';
@@ -52,7 +48,6 @@ class _AppShellState extends ConsumerState<AppShell>
   void _onTabTap(int index) {
     HapticFeedback.selectionClick();
     if (index == widget.navigationShell.currentIndex) {
-      // Already on this tab – no-op (or scroll to top in future)
       return;
     }
     widget.navigationShell.goBranch(
@@ -72,10 +67,8 @@ class _AppShellState extends ConsumerState<AppShell>
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       body: Stack(
         children: [
-          // ── Page content ───────────────────────────────────
           widget.navigationShell,
 
-          // ── Connection banner (offline) ────────────────────
           if (!isConnected)
             Positioned(
               top: MediaQuery.of(context).padding.top + 8,
@@ -87,7 +80,6 @@ class _AppShellState extends ConsumerState<AppShell>
                   .slideY(begin: -0.5, end: 0),
             ),
 
-          // ── Floating Island Nav Bar ────────────────────────
           Positioned(
             left: 0,
             right: 0,
@@ -159,9 +151,6 @@ class _AppShellState extends ConsumerState<AppShell>
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Nav Item Data
-// ─────────────────────────────────────────────────────────────
 class _NavItem {
   final IconData activeIcon;
   final IconData icon;
@@ -171,9 +160,6 @@ class _NavItem {
   const _NavItem(this.activeIcon, this.icon, this.label, this.path);
 }
 
-// ─────────────────────────────────────────────────────────────
-// Island Nav Item
-// ─────────────────────────────────────────────────────────────
 class _IslandNavItem extends StatefulWidget {
   final IconData icon;
   final String label;
@@ -281,9 +267,6 @@ class _IslandNavItemState extends State<_IslandNavItem>
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Offline Connection Banner
-// ─────────────────────────────────────────────────────────────
 class _ConnectionBanner extends StatelessWidget {
   final bool isDark;
   const _ConnectionBanner({required this.isDark});

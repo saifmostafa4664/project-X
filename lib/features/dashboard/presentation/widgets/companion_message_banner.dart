@@ -1,7 +1,3 @@
-/// Smart Umbrella App - Companion Message Banner Widget
-///
-/// Displays contextual companion messages like battery status,
-/// solar activity, and power saving suggestions.
 library;
 
 import 'package:flutter/material.dart';

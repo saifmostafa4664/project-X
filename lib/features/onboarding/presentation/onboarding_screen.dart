@@ -1,4 +1,3 @@
-/// Smart Umbrella App - Premium Onboarding Screen
 library;
 
 import 'package:flutter/material.dart';
@@ -91,7 +90,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         child: SafeArea(
           child: Column(
             children: [
-              // Skip
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
@@ -120,7 +118,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 ),
               ),
 
-              // Pages
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
@@ -130,12 +127,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 ),
               ),
 
-              // Dots + Button
               Padding(
                 padding: const EdgeInsets.fromLTRB(28, 0, 28, 40),
                 child: Column(
                   children: [
-                    // Animated dots
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(_pages.length, (i) {
@@ -156,7 +151,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       }),
                     ),
                     const SizedBox(height: 32),
-                    // Button
                     SizedBox(
                       width: double.infinity,
                       child: GradientButton(
@@ -219,7 +213,6 @@ class _OnboardingPageView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Icon circle with glow
           Container(
             width: 160,
             height: 160,
@@ -258,7 +251,6 @@ class _OnboardingPageView extends StatelessWidget {
 
           const SizedBox(height: 52),
 
-          // Title
           Text(
             data.title,
             style: const TextStyle(
@@ -275,7 +267,6 @@ class _OnboardingPageView extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // Subtitle
           Text(
             data.subtitle,
             style: TextStyle(

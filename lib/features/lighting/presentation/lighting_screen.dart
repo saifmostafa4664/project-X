@@ -1,7 +1,3 @@
-/// Smart Umbrella App - Lighting Screen
-///
-/// Full lighting control with color picker, brightness slider,
-/// and lighting mode selection.
 library;
 
 import 'package:flutter/material.dart';
@@ -21,12 +17,11 @@ class LightingScreen extends ConsumerStatefulWidget {
 }
 
 class _LightingScreenState extends ConsumerState<LightingScreen> {
-  Color _selectedColor = Colors.white;
+  Color _selectedColor = const Color.fromARGB(255, 172, 13, 13);
 
   @override
   void initState() {
     super.initState();
-    // Initialize with current color
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final currentColor = ref.read(lightColorProvider);
       setState(() => _selectedColor = currentColor);
@@ -41,11 +36,11 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.darkBackground : AppColors.lightBackground,
+      backgroundColor: isDark
+          ? AppColors.darkBackground
+          : AppColors.lightBackground,
       body: CustomScrollView(
         slivers: [
-          // Custom header
           SliverToBoxAdapter(
             child: _LightingHeader(isDark: isDark, isOn: lighting.isOn),
           ),
@@ -53,219 +48,220 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-            // Light Preview Card
-            Container(
-              width: double.infinity,
-              height: 160,
-              decoration: BoxDecoration(
-                gradient: lighting.isOn
-                    ? LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          lighting.effectiveColor,
-                          lighting.effectiveColor.withValues(alpha: 0.7),
-                        ],
-                      )
-                    : LinearGradient(
-                        colors: [
-                          isDark
-                              ? AppColors.warmGray800
-                              : AppColors.warmGray200,
-                          isDark
-                              ? AppColors.warmGray700
-                              : AppColors.warmGray300,
-                        ],
-                      ),
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: lighting.isOn
-                    ? [
-                        BoxShadow(
-                          color: lighting.effectiveColor.withValues(alpha: 0.4),
-                          blurRadius: 30,
-                          offset: const Offset(0, 10),
+                Container(
+                  width: double.infinity,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    gradient: lighting.isOn
+                        ? LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              lighting.effectiveColor,
+                              lighting.effectiveColor.withValues(alpha: 0.7),
+                            ],
+                          )
+                        : LinearGradient(
+                            colors: [
+                              isDark
+                                  ? AppColors.warmGray800
+                                  : AppColors.warmGray200,
+                              isDark
+                                  ? AppColors.warmGray700
+                                  : AppColors.warmGray300,
+                            ],
+                          ),
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: lighting.isOn
+                        ? [
+                            BoxShadow(
+                              color: lighting.effectiveColor.withValues(
+                                alpha: 0.4,
+                              ),
+                              blurRadius: 30,
+                              offset: const Offset(0, 10),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                              lighting.isOn
+                                  ? Icons.lightbulb
+                                  : Icons.lightbulb_outline,
+                              color: lighting.isOn
+                                  ? Colors.white
+                                  : AppColors.warmGray500,
+                              size: 48,
+                            )
+                            .animate(target: lighting.isOn ? 1 : 0)
+                            .scale(
+                              begin: const Offset(0.8, 0.8),
+                              end: const Offset(1.0, 1.0),
+                              duration: 300.ms,
+                            ),
+                        const SizedBox(height: 8),
+                        Text(
+                          lighting.isOn ? 'Lights On' : 'Lights Off',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
+                                color: lighting.isOn
+                                    ? Colors.white
+                                    : AppColors.warmGray500,
+                                fontWeight: FontWeight.w600,
+                              ),
                         ),
-                      ]
-                    : null,
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                          lighting.isOn
-                              ? Icons.lightbulb
-                              : Icons.lightbulb_outline,
-                          color: lighting.isOn
-                              ? Colors.white
-                              : AppColors.warmGray500,
-                          size: 48,
-                        )
-                        .animate(target: lighting.isOn ? 1 : 0)
-                        .scale(
-                          begin: const Offset(0.8, 0.8),
-                          end: const Offset(1.0, 1.0),
-                          duration: 300.ms,
-                        ),
-                    const SizedBox(height: 8),
-                    Text(
-                      lighting.isOn ? 'Lights On' : 'Lights Off',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: lighting.isOn
-                            ? Colors.white
-                            : AppColors.warmGray500,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
+                ).animate().fadeIn(duration: 400.ms),
+
+                const SizedBox(height: 32),
+
+                _buildSection(
+                  context,
+                  title: 'Power',
+                  child: SwitchListTile(
+                    title: Text(
+                      lighting.isOn ? 'On' : 'Off',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    value: lighting.isOn,
+                    onChanged: isConnected
+                        ? (_) => ref
+                              .read(lightingControlProvider.notifier)
+                              .toggle()
+                        : null,
+                  ),
                 ),
-              ),
-            ).animate().fadeIn(duration: 400.ms),
 
-            const SizedBox(height: 32),
+                const SizedBox(height: 24),
 
-            // Power Toggle
-            _buildSection(
-              context,
-              title: 'Power',
-              child: SwitchListTile(
-                title: Text(
-                  lighting.isOn ? 'On' : 'Off',
-                  style: Theme.of(context).textTheme.titleMedium,
+                _buildSection(
+                  context,
+                  title: 'Brightness',
+                  trailing: '${lighting.brightness}%',
+                  child: Slider(
+                    value: lighting.brightness.toDouble(),
+                    min: 0,
+                    max: 100,
+                    divisions: 20,
+                    onChanged: isConnected && lighting.isOn
+                        ? (value) {
+                            ref
+                                .read(lightingControlProvider.notifier)
+                                .setBrightness(value.round());
+                          }
+                        : null,
+                  ),
                 ),
-                value: lighting.isOn,
-                onChanged: isConnected
-                    ? (_) => ref.read(lightingControlProvider.notifier).toggle()
-                    : null,
-              ),
-            ),
 
-            const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-            // Brightness Slider
-            _buildSection(
-              context,
-              title: 'Brightness',
-              trailing: '${lighting.brightness}%',
-              child: Slider(
-                value: lighting.brightness.toDouble(),
-                min: 0,
-                max: 100,
-                divisions: 20,
-                onChanged: isConnected && lighting.isOn
-                    ? (value) {
-                        ref
-                            .read(lightingControlProvider.notifier)
-                            .setBrightness(value.round());
-                      }
-                    : null,
-              ),
-            ),
+                _buildSection(
+                  context,
+                  title: 'Quick Colors',
+                  child: Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: presetColors.map((color) {
+                      final isSelected =
+                          _selectedColor.toARGB32() == color.toARGB32();
+                      return GestureDetector(
+                        onTap: isConnected && lighting.isOn
+                            ? () {
+                                setState(() => _selectedColor = color);
+                                ref
+                                    .read(lightingControlProvider.notifier)
+                                    .setColor(color);
+                              }
+                            : null,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: color,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : Colors.transparent,
+                              width: 3,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: color.withValues(alpha: 0.4),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: isSelected
+                              ? const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 24,
+                                )
+                              : null,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
 
-            const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-            // Preset Colors
-            _buildSection(
-              context,
-              title: 'Quick Colors',
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: presetColors.map((color) {
-                  final isSelected =
-                      _selectedColor.toARGB32() == color.toARGB32();
-                  return GestureDetector(
-                    onTap: isConnected && lighting.isOn
-                        ? () {
+                _buildSection(
+                  context,
+                  title: 'Custom Color',
+                  child: ColorPicker(
+                    color: _selectedColor,
+                    enableShadesSelection: false,
+                    pickersEnabled: const {
+                      ColorPickerType.wheel: true,
+                      ColorPickerType.accent: false,
+                      ColorPickerType.primary: false,
+                    },
+                    wheelDiameter: 220,
+                    wheelWidth: 20,
+                    onColorChanged: isConnected && lighting.isOn
+                        ? (color) {
                             setState(() => _selectedColor = color);
                             ref
                                 .read(lightingControlProvider.notifier)
                                 .setColor(color);
                           }
-                        : null,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isSelected
-                              ? AppColors.primary
-                              : Colors.transparent,
-                          width: 3,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: color.withValues(alpha: 0.4),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: isSelected
-                          ? const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 24,
-                            )
-                          : null,
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
+                        : (color) {},
+                  ),
+                ),
 
-            const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-            // Color Picker
-            _buildSection(
-              context,
-              title: 'Custom Color',
-              child: ColorPicker(
-                color: _selectedColor,
-                enableShadesSelection: false,
-                pickersEnabled: const {
-                  ColorPickerType.wheel: true,
-                  ColorPickerType.accent: false,
-                  ColorPickerType.primary: false,
-                },
-                wheelDiameter: 220,
-                wheelWidth: 20,
-                onColorChanged: isConnected && lighting.isOn
-                    ? (color) {
-                        setState(() => _selectedColor = color);
-                        ref
-                            .read(lightingControlProvider.notifier)
-                            .setColor(color);
-                      }
-                    : (color) {},
-              ),
-            ),
+                _buildSection(
+                  context,
+                  title: 'Lighting Mode',
+                  child: Column(
+                    children: LightingMode.values.map((mode) {
+                      final isSelected = lighting.mode == mode;
+                      return _LightingModeCard(
+                        mode: mode,
+                        isSelected: isSelected,
+                        isEnabled: isConnected,
+                        onTap: () {
+                          ref
+                              .read(lightingControlProvider.notifier)
+                              .setMode(mode);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
 
-            const SizedBox(height: 24),
-
-            // Lighting Modes
-            _buildSection(
-              context,
-              title: 'Lighting Mode',
-              child: Column(
-                children: LightingMode.values.map((mode) {
-                  final isSelected = lighting.mode == mode;
-                  return _LightingModeCard(
-                    mode: mode,
-                    isSelected: isSelected,
-                    isEnabled: isConnected,
-                    onTap: () {
-                      ref.read(lightingControlProvider.notifier).setMode(mode);
-                    },
-                  );
-                }).toList(),
-              ),
-            ),
-
-              const SizedBox(height: 40),
+                const SizedBox(height: 40),
               ]),
             ),
           ),
@@ -414,9 +410,6 @@ class _LightingModeCard extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Lighting Screen Header
-// ─────────────────────────────────────────────────────────────
 class _LightingHeader extends StatelessWidget {
   final bool isDark;
   final bool isOn;
@@ -453,8 +446,11 @@ class _LightingHeader extends StatelessWidget {
                 ),
               ],
             ),
-            child: const Icon(Icons.lightbulb_rounded,
-                color: Colors.white, size: 22),
+            child: const Icon(
+              Icons.lightbulb_rounded,
+              color: Colors.white,
+              size: 22,
+            ),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -477,8 +473,8 @@ class _LightingHeader extends StatelessWidget {
                     color: isOn
                         ? const Color(0xFF10B981)
                         : (isDark
-                            ? const Color(0xFF64748B)
-                            : const Color(0xFF94A3B8)),
+                              ? const Color(0xFF64748B)
+                              : const Color(0xFF94A3B8)),
                   ),
                 ),
               ],

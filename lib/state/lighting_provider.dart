@@ -1,7 +1,3 @@
-/// Smart Umbrella App - Lighting Provider
-///
-/// Riverpod providers for RGB lighting control including
-/// color selection, brightness, and lighting modes.
 library;
 
 import 'package:flutter/material.dart';
@@ -9,37 +5,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../device/models/umbrella_state.dart';
 import 'device_provider.dart';
 
-/// Provider for current lighting state
 final lightingStateProvider = Provider<LightingState>((ref) {
   final asyncState = ref.watch(deviceStateStreamProvider);
   return asyncState.when(
     data: (state) => state.lighting,
     loading: () => const LightingState(),
+    // ignore: unnecessary_underscores
     error: (_, __) => const LightingState(),
   );
 });
 
-/// Provider for light on/off status
 final isLightOnProvider = Provider<bool>((ref) {
   return ref.watch(lightingStateProvider).isOn;
 });
 
-/// Provider for current light color
 final lightColorProvider = Provider<Color>((ref) {
   return ref.watch(lightingStateProvider).color;
 });
 
-/// Provider for current brightness
 final lightBrightnessProvider = Provider<int>((ref) {
   return ref.watch(lightingStateProvider).brightness;
 });
 
-/// Provider for current lighting mode
 final lightingModeProvider = Provider<LightingMode>((ref) {
   return ref.watch(lightingStateProvider).mode;
 });
 
-/// Notifier for lighting control actions
 class LightingControlNotifier extends AsyncNotifier<LightingState> {
   @override
   Future<LightingState> build() async {
@@ -47,7 +38,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
     return device.currentState.lighting;
   }
 
-  /// Toggle lights on/off
   Future<void> toggle() async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -62,7 +52,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
     }
   }
 
-  /// Turn lights on
   Future<void> turnOn() async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -77,7 +66,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
     }
   }
 
-  /// Turn lights off
   Future<void> turnOff() async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -92,7 +80,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
     }
   }
 
-  /// Set RGB color
   Future<void> setColor(Color color) async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -106,7 +93,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
     }
   }
 
-  /// Set brightness level (0-100)
   Future<void> setBrightness(int level) async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -120,7 +106,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
     }
   }
 
-  /// Set lighting mode
   Future<void> setMode(LightingMode mode) async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -143,17 +128,16 @@ final lightingControlProvider =
       LightingControlNotifier.new,
     );
 
-/// Preset colors for quick selection
 final presetColorsProvider = Provider<List<Color>>((ref) {
   return [
-    const Color(0xFFFFFFFF), // White
-    const Color(0xFFFBBF24), // Warm yellow (sunset)
-    const Color(0xFFF97316), // Orange
-    const Color(0xFFEF4444), // Red
-    const Color(0xFFEC4899), // Pink
-    const Color(0xFFA855F7), // Purple
-    const Color(0xFF3B82F6), // Blue
-    const Color(0xFF06B6D4), // Cyan
-    const Color(0xFF10B981), // Green
+    const Color(0xFFFFFFFF),
+    const Color(0xFFFBBF24),
+    const Color(0xFFF97316),
+    const Color(0xFFEF4444),
+    const Color(0xFFEC4899),
+    const Color(0xFFA855F7),
+    const Color(0xFF3B82F6),
+    const Color(0xFF06B6D4),
+    const Color(0xFF10B981),
   ];
 });

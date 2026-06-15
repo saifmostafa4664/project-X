@@ -1,14 +1,3 @@
-/// Smart Umbrella App - Fake Device Implementation
-///
-/// Simulation mode implementation of UmbrellaDeviceInterface.
-/// Provides realistic mock behavior including:
-/// - Battery drain and solar charging simulation
-/// - Connection/disconnection simulation
-/// - Real-time state changes with delays
-/// - Debug controls for forcing various states
-///
-/// This is the primary implementation used during development
-/// before hardware (ESP32) is available.
 library;
 
 import 'dart:async';
@@ -17,21 +6,15 @@ import 'package:flutter/material.dart';
 import 'umbrella_device_interface.dart';
 import 'models/umbrella_state.dart';
 
-/// Fake device implementation for simulation mode
 class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
-  /// Internal state controller
   final _stateController = StreamController<UmbrellaDeviceState>.broadcast();
 
-  /// Current device state
   UmbrellaDeviceState _state = UmbrellaDeviceState.initial();
 
-  /// Timer for periodic state updates (battery drain/charge)
   Timer? _simulationTimer;
 
-  /// Random generator for simulation variance
   final _random = Random();
 
-  /// Debug flags for forcing states
   bool _forceDisconnected = false;
   bool _forceLowBattery = false;
   bool _forceStrongSunlight = false;
@@ -54,10 +37,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
       _state.connectionStatus == ConnectionStatus.connected &&
       !_forceDisconnected;
 
-  // ============================================================
-  // CONNECTION MANAGEMENT
-  // ============================================================
-
   @override
   Future<bool> connect() async {
     if (_forceDisconnected) {
@@ -77,7 +56,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
       ),
     );
 
-    // Simulate connection delay
     await Future.delayed(const Duration(milliseconds: 1500));
 
     _updateState(
@@ -101,19 +79,14 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     );
   }
 
-  // ============================================================
-  // UMBRELLA CONTROL
-  // ============================================================
-
   @override
   Future<void> openUmbrella() async {
     _ensureConnected();
 
     if (_state.umbrellaPosition == UmbrellaPosition.open) {
-      return; // Already open
+      return;
     }
 
-    // Start opening
     _updateState(
       _state.copyWith(
         umbrellaPosition: UmbrellaPosition.opening,
@@ -121,10 +94,8 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
       ),
     );
 
-    // Simulate motor operation time
     await Future.delayed(const Duration(milliseconds: 2000));
 
-    // Complete opening
     _updateState(
       _state.copyWith(
         umbrellaPosition: UmbrellaPosition.open,
@@ -138,10 +109,9 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     _ensureConnected();
 
     if (_state.umbrellaPosition == UmbrellaPosition.closed) {
-      return; // Already closed
+      return;
     }
 
-    // Start closing
     _updateState(
       _state.copyWith(
         umbrellaPosition: UmbrellaPosition.closing,
@@ -149,10 +119,8 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
       ),
     );
 
-    // Simulate motor operation time
     await Future.delayed(const Duration(milliseconds: 2000));
 
-    // Complete closing
     _updateState(
       _state.copyWith(
         umbrellaPosition: UmbrellaPosition.closed,
@@ -165,9 +133,7 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
   Future<void> stopUmbrella() async {
     _ensureConnected();
 
-    // If transitioning, stop in current position
     if (_state.isTransitioning) {
-      // Determine which position based on direction
       final newPosition = _state.umbrellaPosition == UmbrellaPosition.opening
           ? UmbrellaPosition.open
           : UmbrellaPosition.closed;
@@ -180,10 +146,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
       );
     }
   }
-
-  // ============================================================
-  // RGB LIGHTING CONTROL
-  // ============================================================
 
   @override
   Future<void> toggleLight(bool on) async {
@@ -241,10 +203,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     );
   }
 
-  // ============================================================
-  // SOUND SYSTEM CONTROL
-  // ============================================================
-
   @override
   Future<void> playMusic() async {
     _ensureConnected();
@@ -288,10 +246,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     );
   }
 
-  // ============================================================
-  // STATUS & MONITORING
-  // ============================================================
-
   @override
   Future<UmbrellaDeviceState> getStatus() async {
     await Future.delayed(const Duration(milliseconds: 200));
@@ -304,11 +258,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     _updateState(_state.copyWith(lastUpdated: DateTime.now()));
   }
 
-  // ============================================================
-  // DEBUG CONTROLS
-  // ============================================================
-
-  /// Force device into disconnected state (for testing)
   void forceDisconnected(bool force) {
     _forceDisconnected = force;
     if (force && isConnected) {
@@ -321,7 +270,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     }
   }
 
-  /// Force low battery state (for testing)
   void forceLowBattery(bool force) {
     _forceLowBattery = force;
     if (force) {
@@ -337,7 +285,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     }
   }
 
-  /// Force strong sunlight (for testing solar features)
   void forceStrongSunlight(bool force) {
     _forceStrongSunlight = force;
     if (force) {
@@ -354,26 +301,17 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     }
   }
 
-  /// Get debug flags status
   Map<String, bool> get debugFlags => {
     'forceDisconnected': _forceDisconnected,
     'forceLowBattery': _forceLowBattery,
     'forceStrongSunlight': _forceStrongSunlight,
   };
 
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
-
   @override
   void dispose() {
     _simulationTimer?.cancel();
     _stateController.close();
   }
-
-  // ============================================================
-  // PRIVATE METHODS
-  // ============================================================
 
   void _ensureConnected() {
     if (!isConnected) {
@@ -386,7 +324,6 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     _stateController.add(_state);
   }
 
-  /// Start the simulation timer for realistic behavior
   void _startSimulation() {
     _simulationTimer = Timer.periodic(
       const Duration(seconds: 5),
@@ -394,35 +331,28 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
     );
   }
 
-  /// Simulate realistic real-time changes
   void _simulateRealTimeChanges() {
     if (!isConnected) return;
 
-    // Don't override forced states
     if (_forceLowBattery || _forceStrongSunlight) return;
 
     var battery = _state.battery;
 
-    // Simulate solar panel fluctuation
-    final solarBase = _random.nextDouble() * 50; // 0-50 watts
+    final solarBase = _random.nextDouble() * 50;
     final solarPower =
-        solarBase + (_random.nextDouble() * 10 - 5); // ±5 variance
+        solarBase + (_random.nextDouble() * 10 - 5);
     final isSolarActive = solarPower > 10;
 
-    // Determine charging status and battery change
     int batteryChange = 0;
     ChargingStatus chargingStatus;
 
     if (solarPower > 20) {
-      // Charging from solar
       chargingStatus = ChargingStatus.charging;
       batteryChange = 1;
     } else if (_state.lighting.isOn || _state.sound.isPlaying) {
-      // Discharging due to active features
       chargingStatus = ChargingStatus.discharging;
       batteryChange = -1;
     } else {
-      // Idle discharge (very slow)
       chargingStatus = ChargingStatus.discharging;
       batteryChange = _random.nextBool() ? 0 : -1;
     }

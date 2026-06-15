@@ -1,7 +1,3 @@
-/// Smart Umbrella App - Debug Screen
-///
-/// Debug panel for simulating device states including low battery,
-/// strong sunlight, and device offline scenarios.
 library;
 
 import 'package:flutter/material.dart';
@@ -62,7 +58,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          // Warning Banner
           if (!isSimulation)
             Container(
               padding: const EdgeInsets.all(16),
@@ -90,7 +85,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
               ),
             ),
 
-          // Info Banner
           Container(
             padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.only(bottom: 24),
@@ -129,7 +123,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
             ),
           ),
 
-          // Debug Controls
           Text(
             'Simulate Conditions',
             style: Theme.of(
@@ -138,7 +131,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Low Battery
           _DebugToggle(
             icon: Icons.battery_1_bar_rounded,
             iconColor: AppColors.error,
@@ -155,7 +147,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
 
           const SizedBox(height: 12),
 
-          // Strong Sunlight
           _DebugToggle(
             icon: Icons.wb_sunny_rounded,
             iconColor: AppColors.solar,
@@ -172,7 +163,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
 
           const SizedBox(height: 12),
 
-          // Device Offline
           _DebugToggle(
             icon: Icons.wifi_off_rounded,
             iconColor: AppColors.warmGray500,
@@ -189,7 +179,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
 
           const SizedBox(height: 32),
 
-          // Actions
           Text(
             'Actions',
             style: Theme.of(
@@ -198,7 +187,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Reset All
           _DebugButton(
             icon: Icons.refresh_rounded,
             iconColor: AppColors.primary,
@@ -223,7 +211,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
 
           const SizedBox(height: 12),
 
-          // Reconnect
           _DebugButton(
             icon: Icons.link_rounded,
             iconColor: AppColors.success,
@@ -251,7 +238,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
 
           const SizedBox(height: 40),
 
-          // Technical Info
           Text(
             'Technical Info',
             style: Theme.of(

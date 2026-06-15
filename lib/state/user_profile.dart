@@ -1,15 +1,9 @@
-/// Smart Umbrella – User Profile State
-///
-/// Persists user name, avatar, and usage stats to SharedPreferences.
 library;
 
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ─────────────────────────────────────────────────────────────
-// Model
-// ─────────────────────────────────────────────────────────────
 class UserProfile {
   final String name;
   final String avatarEmoji;
@@ -74,13 +68,10 @@ class UserProfile {
       );
 }
 
-// ─────────────────────────────────────────────────────────────
-// Session Record
-// ─────────────────────────────────────────────────────────────
 class SessionRecord {
   final DateTime date;
   final int durationMinutes;
-  final String mode; // e.g. 'Beach', 'Party', 'Relax'
+  final String mode;
 
   const SessionRecord({
     required this.date,
@@ -101,9 +92,6 @@ class SessionRecord {
       );
 }
 
-// ─────────────────────────────────────────────────────────────
-// Provider
-// ─────────────────────────────────────────────────────────────
 const _kProfileKey = 'user_profile_v1';
 
 class UserProfileNotifier extends StateNotifier<UserProfile> {
@@ -118,7 +106,6 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
       try {
         state = UserProfile.fromJson(jsonDecode(raw) as Map<String, dynamic>);
       } catch (_) {
-        // corrupted data – reset
         state = UserProfile.defaultProfile();
       }
     }

@@ -1,4 +1,3 @@
-/// Theme mode provider with SharedPreferences persistence.
 library;
 
 import 'package:flutter/material.dart';

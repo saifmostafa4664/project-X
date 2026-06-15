@@ -1,4 +1,3 @@
-/// Glassmorphism card with gradient border and blur effect.
 library;
 
 import 'package:flutter/material.dart';

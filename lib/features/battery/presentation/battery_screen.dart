@@ -1,7 +1,3 @@
-/// Smart Umbrella App - Battery Screen
-///
-/// Detailed battery and solar monitoring with status indicators,
-/// charging history, and power-saving tips.
 library;
 
 import 'package:flutter/material.dart';
@@ -49,7 +45,6 @@ class BatteryScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-            // Battery Level Card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(32),
@@ -70,7 +65,6 @@ class BatteryScreen extends ConsumerWidget {
               ),
               child: Column(
                 children: [
-                  // Battery percentage circle
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -128,7 +122,6 @@ class BatteryScreen extends ConsumerWidget {
 
                   const SizedBox(height: 24),
 
-                  // Status text
                   Text(
                     _getStatusText(battery),
                     style: Theme.of(
@@ -142,7 +135,6 @@ class BatteryScreen extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            // Solar Panel Card
             Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -230,7 +222,6 @@ class BatteryScreen extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            // Stats Grid
             Row(
               children: [
                 Expanded(
@@ -257,7 +248,6 @@ class BatteryScreen extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            // Power Tips
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -440,9 +430,6 @@ class _TipItem extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Battery Screen Header
-// ─────────────────────────────────────────────────────────────
 class _BatteryHeader extends StatelessWidget {
   final bool isDark;
   final Color batteryColor;

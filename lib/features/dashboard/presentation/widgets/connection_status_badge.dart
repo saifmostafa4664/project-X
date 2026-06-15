@@ -1,6 +1,3 @@
-/// Smart Umbrella App - Connection Status Badge Widget
-///
-/// Shows the current connection status to the umbrella device.
 library;
 
 import 'package:flutter/material.dart';

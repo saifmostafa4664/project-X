@@ -1,7 +1,3 @@
-/// Smart Umbrella App - Sound Screen
-///
-/// Sound system control with play/pause, volume control,
-/// and playback status display.
 library;
 
 import 'package:flutter/material.dart';
@@ -32,7 +28,6 @@ class SoundScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-            // Now Playing Card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(32),
@@ -62,7 +57,6 @@ class SoundScreen extends ConsumerWidget {
               ),
               child: Column(
                 children: [
-                  // Album art placeholder
                   Container(
                         width: 120,
                         height: 120,
@@ -91,7 +85,6 @@ class SoundScreen extends ConsumerWidget {
 
                   const SizedBox(height: 24),
 
-                  // Track name
                   Text(
                     sound.currentTrack ?? 'No track playing',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -112,11 +105,9 @@ class SoundScreen extends ConsumerWidget {
 
                   const SizedBox(height: 32),
 
-                  // Playback controls
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Skip previous (placeholder)
                       IconButton(
                         onPressed: isConnected ? () {} : null,
                         icon: Icon(
@@ -130,7 +121,6 @@ class SoundScreen extends ConsumerWidget {
 
                       const SizedBox(width: 16),
 
-                      // Play/Pause button
                       GestureDetector(
                         onTap: isConnected
                             ? () => ref
@@ -172,7 +162,6 @@ class SoundScreen extends ConsumerWidget {
 
                       const SizedBox(width: 16),
 
-                      // Skip next (placeholder)
                       IconButton(
                         onPressed: isConnected ? () {} : null,
                         icon: Icon(
@@ -191,7 +180,6 @@ class SoundScreen extends ConsumerWidget {
 
             const SizedBox(height: 32),
 
-            // Volume Control Card
             Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
@@ -277,7 +265,6 @@ class SoundScreen extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            // Quick volume buttons
             Row(
               children: [
                 _VolumeButton(
@@ -397,9 +384,6 @@ class _VolumeButton extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Sound Screen Header
-// ─────────────────────────────────────────────────────────────
 class _SoundHeader extends StatelessWidget {
   final bool isDark;
   final bool isPlaying;

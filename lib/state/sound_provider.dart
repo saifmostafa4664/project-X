@@ -1,39 +1,31 @@
-/// Smart Umbrella App - Sound Provider
-///
-/// Riverpod providers for sound system control including
-/// play/pause, volume, and playback status.
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../device/models/umbrella_state.dart';
 import 'device_provider.dart';
 
-/// Provider for current sound state
 final soundStateProvider = Provider<SoundState>((ref) {
   final asyncState = ref.watch(deviceStateStreamProvider);
   return asyncState.when(
     data: (state) => state.sound,
     loading: () => const SoundState(),
+    // ignore: unnecessary_underscores
     error: (_, __) => const SoundState(),
   );
 });
 
-/// Provider for playback status
 final isPlayingProvider = Provider<bool>((ref) {
   return ref.watch(soundStateProvider).isPlaying;
 });
 
-/// Provider for current volume
 final volumeProvider = Provider<int>((ref) {
   return ref.watch(soundStateProvider).volume;
 });
 
-/// Provider for current track name
 final currentTrackProvider = Provider<String?>((ref) {
   return ref.watch(soundStateProvider).currentTrack;
 });
 
-/// Notifier for sound control actions
 class SoundControlNotifier extends AsyncNotifier<SoundState> {
   @override
   Future<SoundState> build() async {
@@ -41,7 +33,6 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
     return device.currentState.sound;
   }
 
-  /// Toggle play/pause
   Future<void> togglePlayback() async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -61,7 +52,6 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
     }
   }
 
-  /// Play music
   Future<void> play() async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -76,7 +66,6 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
     }
   }
 
-  /// Pause music
   Future<void> pause() async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;
@@ -91,7 +80,6 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
     }
   }
 
-  /// Set volume level (0-100)
   Future<void> setVolume(int level) async {
     final device = ref.read(deviceProvider);
     if (!device.isConnected) return;

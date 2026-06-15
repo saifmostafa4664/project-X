@@ -1,8 +1,3 @@
-/// Smart Umbrella App - Navigation Router (v3 – ShellRoute + Splash)
-///
-/// Uses StatefulShellRoute to provide a persistent nav bar across all
-/// main screens (Dashboard, Lighting, Sound, Battery).
-/// Settings/Profile/Debug are pushed as separate full-screen routes.
 library;
 
 import 'package:flutter/material.dart';
@@ -20,13 +15,11 @@ import '../../features/debug/presentation/debug_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 
-/// Provider for the router instance
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: RoutePaths.splash,
     debugLogDiagnostics: true,
     routes: [
-      // ── Splash ────────────────────────────────────────────
       GoRoute(
         path: RoutePaths.splash,
         name: RouteNames.splash,
@@ -38,7 +31,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
 
-      // ── Onboarding ────────────────────────────────────────
       GoRoute(
         path: RoutePaths.onboarding,
         name: RouteNames.onboarding,
@@ -50,12 +42,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
 
-      // ── Main Shell (persistent nav bar) ───────────────────
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             AppShell(navigationShell: navigationShell),
         branches: [
-          // Branch 0 – Dashboard
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -72,7 +62,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
 
-          // Branch 1 – Lighting
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -89,7 +78,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
 
-          // Branch 2 – Sound
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -106,7 +94,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
 
-          // Branch 3 – Battery
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -125,7 +112,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
-      // ── Settings (full-screen push, outside shell) ────────
       GoRoute(
         path: RoutePaths.settings,
         name: RouteNames.settings,
@@ -145,7 +131,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
 
-      // ── Debug (full-screen push) ──────────────────────────
       GoRoute(
         path: RoutePaths.debug,
         name: RouteNames.debug,
@@ -165,7 +150,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
 
-      // ── Profile (full-screen push) ────────────────────────
       GoRoute(
         path: RoutePaths.profile,
         name: RouteNames.profile,

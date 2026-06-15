@@ -1,4 +1,3 @@
-/// Smart Umbrella App - Premium Battery Status Card Widget
 library;
 
 import 'package:flutter/material.dart';
@@ -51,7 +50,6 @@ class BatteryStatusCard extends ConsumerWidget {
           padding: const EdgeInsets.all(20),
           child: Row(
             children: [
-              // Arc progress indicator
               SizedBox(
                 width: 68,
                 height: 68,
@@ -85,7 +83,6 @@ class BatteryStatusCard extends ConsumerWidget {
 
               const SizedBox(width: 18),
 
-              // Info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +163,6 @@ class BatteryStatusCard extends ConsumerWidget {
                 ),
               ),
 
-              // Chevron
               Icon(
                 Icons.chevron_right_rounded,
                 color: isDark ? AppColors.slate500 : AppColors.slate400,
