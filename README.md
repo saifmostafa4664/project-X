@@ -1,7 +1,4 @@
 # usmart - Smart Umbrella Control Application
-
-![Logo](assets/logo/Screenshot_2026-04-30_at_9.08.31_PM-removebg-preview.png)
-
 A sophisticated Flutter application for controlling an intelligent beach umbrella with real-time monitoring, RGB lighting control, audio management, and solar battery tracking.
 
 ---
@@ -12,7 +9,6 @@ usmart is an enterprise-grade Flutter application designed to seamlessly control
 
 **Demo Video:** Watch the application in action
 
-[![Watch the demo](assets/logo/Screenshot_2026-04-30_at_9.08.31_PM-removebg-preview.png)](assets/video/WhatsApp%20Video%202026-06-15%20at%201.56.50%20PM.mp4)
 
 ---
 
