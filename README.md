@@ -580,4 +580,4 @@ Built with:
 ---
 
 *Last Updated: June 15, 2026*
-*For more information, visit the [project repository](https://github.com/yourusername/usmart)*
+*For more information, visit the [project repository](https://github.com/saifmostafa4664/project-X.git)*
