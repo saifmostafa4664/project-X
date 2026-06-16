@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/feature_screen_header.dart';
+import '../../../core/widgets/section_title.dart';
+import '../../../core/utils/gradient_helpers.dart';
 import '../../../state/lighting_provider.dart';
 import '../../../state/device_provider.dart';
 import '../../../device/models/umbrella_state.dart';
@@ -61,16 +64,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
                               lighting.effectiveColor.withValues(alpha: 0.7),
                             ],
                           )
-                        : LinearGradient(
-                            colors: [
-                              isDark
-                                  ? AppColors.warmGray800
-                                  : AppColors.warmGray200,
-                              isDark
-                                  ? AppColors.warmGray700
-                                  : AppColors.warmGray300,
-                            ],
-                          ),
+                        : inactiveGradient(isDark),
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: lighting.isOn
                         ? [
@@ -121,7 +115,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
 
                 const SizedBox(height: 32),
 
-                _buildSection(
+                _buildSectionWidget(
                   context,
                   title: 'Power',
                   child: SwitchListTile(
@@ -140,7 +134,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
 
                 const SizedBox(height: 24),
 
-                _buildSection(
+                _buildSectionWidget(
                   context,
                   title: 'Brightness',
                   trailing: '${lighting.brightness}%',
@@ -161,7 +155,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
 
                 const SizedBox(height: 24),
 
-                _buildSection(
+                _buildSectionWidget(
                   context,
                   title: 'Quick Colors',
                   child: Wrap(
@@ -215,7 +209,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
 
                 const SizedBox(height: 24),
 
-                _buildSection(
+                _buildSectionWidget(
                   context,
                   title: 'Custom Color',
                   child: ColorPicker(
@@ -241,7 +235,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
 
                 const SizedBox(height: 24),
 
-                _buildSection(
+                _buildSectionWidget(
                   context,
                   title: 'Lighting Mode',
                   child: Column(
@@ -270,7 +264,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
     );
   }
 
-  Widget _buildSection(
+  Widget _buildSectionWidget(
     BuildContext context, {
     required String title,
     String? trailing,
@@ -279,25 +273,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            if (trailing != null)
-              Text(
-                trailing,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-          ],
-        ),
+        SectionTitle(title: title, trailing: trailing),
         const SizedBox(height: 12),
         child,
       ],
@@ -417,71 +393,27 @@ class _LightingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topPad = MediaQuery.of(context).padding.top;
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, topPad + 16, 20, 20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [const Color(0xFF1A1028), const Color(0xFF120E20)]
-              : [const Color(0xFFF5F0FF), const Color(0xFFEDE8FF)],
+    return FeatureScreenHeader(
+      icon: Icons.lightbulb_rounded,
+      title: 'Lighting Control',
+      subtitle: Text(
+        isOn ? '● Active' : '○ Off',
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: isOn
+              ? const Color(0xFF10B981)
+              : (isDark
+                    ? const Color(0xFF64748B)
+                    : const Color(0xFF94A3B8)),
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF7C3AED), Color(0xFF6D28D9)],
-              ),
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF7C3AED).withValues(alpha: 0.4),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.lightbulb_rounded,
-              color: Colors.white,
-              size: 22,
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Lighting Control',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: isDark ? Colors.white : const Color(0xFF1E1B4B),
-                  ),
-                ),
-                Text(
-                  isOn ? '● Active' : '○ Off',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: isOn
-                        ? const Color(0xFF10B981)
-                        : (isDark
-                              ? const Color(0xFF64748B)
-                              : const Color(0xFF94A3B8)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      darkGradientColors: const [Color(0xFF1A1028), Color(0xFF120E20)],
+      lightGradientColors: const [Color(0xFFF5F0FF), Color(0xFFEDE8FF)],
+      iconGradient: const LinearGradient(
+        colors: [Color(0xFF7C3AED), Color(0xFF6D28D9)],
       ),
+      iconShadowColor: const Color(0xFF7C3AED),
     );
   }
 }

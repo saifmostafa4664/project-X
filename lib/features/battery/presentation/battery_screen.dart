@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/feature_screen_header.dart';
+import '../../../core/widgets/themed_surface_container.dart';
+import '../../../core/widgets/icon_badge.dart';
+import '../../../core/utils/gradient_helpers.dart';
 import '../../../state/battery_provider.dart';
 import '../../../device/models/umbrella_state.dart';
 
@@ -140,34 +144,20 @@ class BatteryScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     gradient: battery.isSolarActive
                         ? AppColors.solarGradient
-                        : LinearGradient(
-                            colors: [
-                              isDark
-                                  ? AppColors.warmGray800
-                                  : AppColors.warmGray200,
-                              isDark
-                                  ? AppColors.warmGray700
-                                  : AppColors.warmGray300,
-                            ],
-                          ),
+                        : inactiveGradient(isDark),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     children: [
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Icon(
-                          Icons.solar_power_rounded,
-                          color: battery.isSolarActive
-                              ? Colors.white
-                              : AppColors.warmGray500,
-                          size: 32,
-                        ),
+                      IconBadge(
+                        icon: Icons.solar_power_rounded,
+                        color: battery.isSolarActive
+                            ? Colors.white
+                            : AppColors.warmGray500,
+                        size: 64,
+                        iconSize: 32,
+                        borderRadius: 16,
+                        backgroundAlpha: 0.2,
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -248,16 +238,8 @@ class BatteryScreen extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            Container(
-              width: double.infinity,
+            ThemedSurfaceContainer(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: isDark ? AppColors.warmGray700 : AppColors.warmGray200,
-                ),
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -369,15 +351,9 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ThemedSurfaceContainer(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? AppColors.warmGray700 : AppColors.warmGray200,
-        ),
-      ),
+      borderRadius: 16,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -442,64 +418,23 @@ class _BatteryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topPad = MediaQuery.of(context).padding.top;
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, topPad + 16, 20, 20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [const Color(0xFF0F1A10), const Color(0xFF0A1210)]
-              : [const Color(0xFFF0FDF4), const Color(0xFFDCFCE7)],
+    return FeatureScreenHeader(
+      icon: Icons.battery_charging_full_rounded,
+      title: 'Battery & Solar',
+      subtitle: Text(
+        '$percentage% Charged',
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: batteryColor,
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [batteryColor, batteryColor.withValues(alpha: 0.7)],
-              ),
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: [
-                BoxShadow(
-                  color: batteryColor.withValues(alpha: 0.4),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: const Icon(Icons.battery_charging_full_rounded,
-                color: Colors.white, size: 22),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Battery & Solar',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: isDark ? Colors.white : const Color(0xFF14532D),
-                  ),
-                ),
-                Text(
-                  '$percentage% Charged',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: batteryColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      darkGradientColors: const [Color(0xFF0F1A10), Color(0xFF0A1210)],
+      lightGradientColors: const [Color(0xFFF0FDF4), Color(0xFFDCFCE7)],
+      iconGradient: LinearGradient(
+        colors: [batteryColor, batteryColor.withValues(alpha: 0.7)],
       ),
+      iconShadowColor: batteryColor,
     );
   }
 }
