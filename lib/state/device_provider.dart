@@ -2,11 +2,41 @@ library;
 
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../device/umbrella_device_interface.dart';
 import '../device/fake_umbrella_device.dart';
+import '../device/esp32_umbrella_device.dart';
 import '../device/models/umbrella_state.dart';
 
+const _esp32IpKey = 'esp32_ip_address';
+const _defaultEsp32Ip = '192.168.1.1';
+
 final simulationModeProvider = StateProvider<bool>((ref) => true);
+
+final esp32IpAddressProvider =
+    StateNotifierProvider<Esp32IpNotifier, String>((ref) {
+  return Esp32IpNotifier();
+});
+
+class Esp32IpNotifier extends StateNotifier<String> {
+  Esp32IpNotifier() : super(_defaultEsp32Ip) {
+    _load();
+  }
+
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(_esp32IpKey);
+    if (saved != null && saved.isNotEmpty) {
+      state = saved;
+    }
+  }
+
+  Future<void> setIp(String ip) async {
+    state = ip;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_esp32IpKey, ip);
+  }
+}
 
 final deviceProvider = Provider<UmbrellaDeviceInterface>((ref) {
   final isSimulation = ref.watch(simulationModeProvider);
@@ -16,7 +46,8 @@ final deviceProvider = Provider<UmbrellaDeviceInterface>((ref) {
     ref.onDispose(() => device.dispose());
     return device;
   } else {
-    final device = FakeUmbrellaDevice();
+    final ip = ref.watch(esp32IpAddressProvider);
+    final device = ESP32UmbrellaDevice(ipAddress: ip);
     ref.onDispose(() => device.dispose());
     return device;
   }
