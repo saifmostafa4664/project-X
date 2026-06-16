@@ -1,5 +1,6 @@
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -72,21 +73,22 @@ class SettingsScreen extends ConsumerWidget {
               .fadeIn(delay: 100.ms, duration: 350.ms)
               .slideX(begin: -0.05, end: 0),
           const SizedBox(height: 10),
-          _PremiumTile(
-            icon: Icons.bug_report_rounded,
-            iconColor: AppColors.amber,
-            title: 'Debug Panel',
-            subtitle: 'Simulate device states',
-            trailing: Icon(
-              Icons.chevron_right_rounded,
-              color: isDark ? AppColors.slate500 : AppColors.slate400,
-            ),
-            onTap: () => context.push(RoutePaths.debug),
-            isDark: isDark,
-          )
-              .animate()
-              .fadeIn(delay: 130.ms, duration: 350.ms)
-              .slideX(begin: -0.05, end: 0),
+          if (kDebugMode)
+            _PremiumTile(
+              icon: Icons.bug_report_rounded,
+              iconColor: AppColors.amber,
+              title: 'Debug Panel',
+              subtitle: 'Simulate device states',
+              trailing: Icon(
+                Icons.chevron_right_rounded,
+                color: isDark ? AppColors.slate500 : AppColors.slate400,
+              ),
+              onTap: () => context.push(RoutePaths.debug),
+              isDark: isDark,
+            )
+                .animate()
+                .fadeIn(delay: 130.ms, duration: 350.ms)
+                .slideX(begin: -0.05, end: 0),
 
           const SizedBox(height: 24),
 

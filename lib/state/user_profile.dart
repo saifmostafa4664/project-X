@@ -116,9 +116,15 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
     await prefs.setString(_kProfileKey, jsonEncode(state.toJson()));
   }
 
+  static const int maxNameLength = 50;
+
   Future<void> updateName(String name) async {
-    if (name.trim().isEmpty) return;
-    state = state.copyWith(name: name.trim());
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return;
+    final sanitized = trimmed.length > maxNameLength
+        ? trimmed.substring(0, maxNameLength)
+        : trimmed;
+    state = state.copyWith(name: sanitized);
     await _save();
   }
 

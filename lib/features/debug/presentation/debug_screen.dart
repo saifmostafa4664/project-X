@@ -225,11 +225,11 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
                     const SnackBar(content: Text('Reconnection successful')),
                   );
                 }
-              } catch (e) {
+              } catch (_) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(
                     context,
-                  ).showSnackBar(SnackBar(content: Text('Failed: $e')));
+                  ).showSnackBar(const SnackBar(content: Text('Reconnection failed')));
                 }
               }
             },

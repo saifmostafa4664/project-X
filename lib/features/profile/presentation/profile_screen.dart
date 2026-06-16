@@ -122,6 +122,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     child: TextField(
                                       controller: _nameCtrl,
                                       autofocus: true,
+                                      maxLength: UserProfileNotifier.maxNameLength,
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                         color: Colors.white,
