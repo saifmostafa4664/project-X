@@ -71,6 +71,13 @@ class SettingsScreen extends ConsumerWidget {
               .animate()
               .fadeIn(delay: 100.ms, duration: 350.ms)
               .slideX(begin: -0.05, end: 0),
+          if (!isSimulation) ...[
+            const SizedBox(height: 10),
+            _Esp32IpTile(isDark: isDark)
+                .animate()
+                .fadeIn(delay: 115.ms, duration: 350.ms)
+                .slideX(begin: -0.05, end: 0),
+          ],
           const SizedBox(height: 10),
           _PremiumTile(
             icon: Icons.bug_report_rounded,
@@ -549,6 +556,120 @@ class _PremiumTileState extends State<_PremiumTile> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Esp32IpTile extends ConsumerStatefulWidget {
+  final bool isDark;
+
+  const _Esp32IpTile({required this.isDark});
+
+  @override
+  ConsumerState<_Esp32IpTile> createState() => _Esp32IpTileState();
+}
+
+class _Esp32IpTileState extends ConsumerState<_Esp32IpTile> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(
+      text: ref.read(esp32IpAddressProvider),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _showIpDialog() {
+    _controller.text = ref.read(esp32IpAddressProvider);
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        final isDark = widget.isDark;
+        return AlertDialog(
+          backgroundColor:
+              isDark ? AppColors.darkSurface : AppColors.lightSurface,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.teal.withValues(alpha: isDark ? 0.15 : 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child:
+                    const Icon(Icons.wifi_rounded, color: AppColors.teal, size: 20),
+              ),
+              const SizedBox(width: 12),
+              const Text('ESP32 IP Address'),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Enter the IP address shown on the Serial Monitor when the ESP32 connects to WiFi.',
+                style: Theme.of(ctx).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _controller,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: '192.168.1.100',
+                  prefixIcon: const Icon(Icons.router_rounded),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () {
+                final ip = _controller.text.trim();
+                if (ip.isNotEmpty) {
+                  ref.read(esp32IpAddressProvider.notifier).setIp(ip);
+                }
+                Navigator.pop(ctx);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ip = ref.watch(esp32IpAddressProvider);
+    return _PremiumTile(
+      icon: Icons.wifi_rounded,
+      iconColor: AppColors.teal,
+      title: 'ESP32 IP Address',
+      subtitle: ip,
+      trailing: Icon(
+        Icons.edit_rounded,
+        color: widget.isDark ? AppColors.slate500 : AppColors.slate400,
+        size: 20,
+      ),
+      onTap: _showIpDialog,
+      isDark: widget.isDark,
     );
   }
 }
