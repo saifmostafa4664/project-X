@@ -1,5 +1,6 @@
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../device/models/umbrella_state.dart';
 import 'device_provider.dart';
@@ -9,8 +10,10 @@ final umbrellaPositionProvider = Provider<UmbrellaPosition>((ref) {
   return asyncState.when(
     data: (state) => state.umbrellaPosition,
     loading: () => UmbrellaPosition.closed,
-    // ignore: unnecessary_underscores
-    error: (_, __) => UmbrellaPosition.closed,
+    error: (error, stackTrace) {
+      debugPrint('UmbrellaPosition stream error: $error');
+      return UmbrellaPosition.closed;
+    },
   );
 });
 
@@ -70,6 +73,10 @@ class UmbrellaControlNotifier extends AsyncNotifier<UmbrellaPosition> {
 
   Future<void> stop() async {
     final device = ref.read(deviceProvider);
+    if (!device.isConnected) {
+      state = AsyncValue.error('Device not connected', StackTrace.current);
+      return;
+    }
     try {
       await device.stopUmbrella();
     } catch (e, st) {

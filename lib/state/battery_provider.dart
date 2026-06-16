@@ -1,5 +1,6 @@
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../device/models/umbrella_state.dart';
 import '../core/constants/app_constants.dart';
@@ -10,8 +11,10 @@ final batteryStateProvider = Provider<BatteryState>((ref) {
   return asyncState.when(
     data: (state) => state.battery,
     loading: () => const BatteryState(),
-    // ignore: unnecessary_underscores
-    error: (_, __) => const BatteryState(),
+    error: (error, stackTrace) {
+      debugPrint('BatteryState stream error: $error');
+      return const BatteryState();
+    },
   );
 });
 
@@ -50,8 +53,10 @@ final companionMessagesProvider = Provider<List<CompanionMessage>>((ref) {
       .when(
         data: (state) => state.lighting,
         loading: () => const LightingState(),
-        // ignore: unnecessary_underscores
-        error: (_, __) => const LightingState(),
+        error: (error, stackTrace) {
+          debugPrint('Lighting state error in companion messages: $error');
+          return const LightingState();
+        },
       );
 
   final messages = <CompanionMessage>[];

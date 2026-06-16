@@ -1,6 +1,7 @@
 library;
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,20 +101,25 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
   }
 
   Future<void> _load() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_kProfileKey);
-    if (raw != null) {
-      try {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_kProfileKey);
+      if (raw != null) {
         state = UserProfile.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-      } catch (_) {
-        state = UserProfile.defaultProfile();
       }
+    } catch (e) {
+      debugPrint('Failed to load user profile: $e');
+      state = UserProfile.defaultProfile();
     }
   }
 
   Future<void> _save() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_kProfileKey, jsonEncode(state.toJson()));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_kProfileKey, jsonEncode(state.toJson()));
+    } catch (e) {
+      debugPrint('Failed to save user profile: $e');
+    }
   }
 
   Future<void> updateName(String name) async {
