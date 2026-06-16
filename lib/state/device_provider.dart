@@ -1,6 +1,7 @@
 library;
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../device/umbrella_device_interface.dart';
 import '../device/fake_umbrella_device.dart';
@@ -37,8 +38,10 @@ final connectionStatusProvider = Provider<ConnectionStatus>((ref) {
   return asyncState.when(
     data: (state) => state.connectionStatus,
     loading: () => ConnectionStatus.disconnected,
-    // ignore: unnecessary_underscores
-    error: (_, __) => ConnectionStatus.error,
+    error: (error, stackTrace) {
+      debugPrint('Connection status stream error: $error');
+      return ConnectionStatus.error;
+    },
   );
 });
 

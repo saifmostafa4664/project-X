@@ -1,8 +1,10 @@
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../device/models/umbrella_state.dart';
+import '../device/umbrella_device_interface.dart';
 import 'device_provider.dart';
 
 final lightingStateProvider = Provider<LightingState>((ref) {
@@ -10,8 +12,10 @@ final lightingStateProvider = Provider<LightingState>((ref) {
   return asyncState.when(
     data: (state) => state.lighting,
     loading: () => const LightingState(),
-    // ignore: unnecessary_underscores
-    error: (_, __) => const LightingState(),
+    error: (error, stackTrace) {
+      debugPrint('LightingState stream error: $error');
+      return const LightingState();
+    },
   );
 });
 
@@ -40,7 +44,13 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> toggle() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     final currentState = ref.read(lightingStateProvider);
     state = const AsyncValue.loading();
@@ -54,7 +64,13 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> turnOn() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     state = const AsyncValue.loading();
     try {
@@ -68,7 +84,13 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> turnOff() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     state = const AsyncValue.loading();
     try {
@@ -82,7 +104,13 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> setColor(Color color) async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     try {
       await device.setRGBColor(color);
@@ -95,7 +123,13 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> setBrightness(int level) async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     try {
       await device.setBrightness(level);
@@ -108,7 +142,13 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> setMode(LightingMode mode) async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     state = const AsyncValue.loading();
     try {

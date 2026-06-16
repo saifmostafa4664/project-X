@@ -1,7 +1,9 @@
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../device/models/umbrella_state.dart';
+import '../device/umbrella_device_interface.dart';
 import 'device_provider.dart';
 
 final soundStateProvider = Provider<SoundState>((ref) {
@@ -9,8 +11,10 @@ final soundStateProvider = Provider<SoundState>((ref) {
   return asyncState.when(
     data: (state) => state.sound,
     loading: () => const SoundState(),
-    // ignore: unnecessary_underscores
-    error: (_, __) => const SoundState(),
+    error: (error, stackTrace) {
+      debugPrint('SoundState stream error: $error');
+      return const SoundState();
+    },
   );
 });
 
@@ -35,7 +39,13 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
 
   Future<void> togglePlayback() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     final isPlaying = ref.read(isPlayingProvider);
     state = const AsyncValue.loading();
@@ -54,7 +64,13 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
 
   Future<void> play() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     state = const AsyncValue.loading();
     try {
@@ -68,7 +84,13 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
 
   Future<void> pause() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     state = const AsyncValue.loading();
     try {
@@ -82,7 +104,13 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
 
   Future<void> setVolume(int level) async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
+    if (!device.isConnected) {
+      state = AsyncValue.error(
+        const DeviceNotConnectedException(),
+        StackTrace.current,
+      );
+      return;
+    }
 
     try {
       await device.setVolume(level);
