@@ -31,6 +31,10 @@ abstract class UmbrellaDeviceInterface {
 
   Future<void> setLightingMode(LightingMode mode);
 
+  Future<void> toggleLamp(bool on);
+
+  Future<void> toggleAroma(bool on);
+
   Future<void> playMusic();
 
   Future<void> pauseMusic();

@@ -4,9 +4,10 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../device/umbrella_device_interface.dart';
 import '../device/fake_umbrella_device.dart';
+import '../device/esp32_umbrella_device.dart';
 import '../device/models/umbrella_state.dart';
 
-final simulationModeProvider = StateProvider<bool>((ref) => true);
+final simulationModeProvider = StateProvider<bool>((ref) => false);
 
 final deviceProvider = Provider<UmbrellaDeviceInterface>((ref) {
   final isSimulation = ref.watch(simulationModeProvider);
@@ -16,7 +17,7 @@ final deviceProvider = Provider<UmbrellaDeviceInterface>((ref) {
     ref.onDispose(() => device.dispose());
     return device;
   } else {
-    final device = FakeUmbrellaDevice();
+    final device = ESP32UmbrellaDevice();
     ref.onDispose(() => device.dispose());
     return device;
   }

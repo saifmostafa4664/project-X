@@ -40,7 +40,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> toggle() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     final currentState = ref.read(lightingStateProvider);
     state = const AsyncValue.loading();
@@ -54,7 +53,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> turnOn() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     state = const AsyncValue.loading();
     try {
@@ -68,7 +66,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> turnOff() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     state = const AsyncValue.loading();
     try {
@@ -82,7 +79,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> setColor(Color color) async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     try {
       await device.setRGBColor(color);
@@ -95,7 +91,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> setBrightness(int level) async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     try {
       await device.setBrightness(level);
@@ -108,7 +103,6 @@ class LightingControlNotifier extends AsyncNotifier<LightingState> {
 
   Future<void> setMode(LightingMode mode) async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     state = const AsyncValue.loading();
     try {

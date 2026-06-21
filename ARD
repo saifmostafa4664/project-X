@@ -1,0 +1,132 @@
+#include <WiFi.h>
+#include <WebServer.h>
+
+// إعدادات شبكة الواي فاي الخاصة بالـ ESP32 (ستبثها اللوحة بنفسها)
+const char* ap_ssid = "SmartUmbrella";
+const char* ap_password = "12345678";
+
+// Pin Definitions
+const int PIN_SOUND = 25;
+const int PIN_LED = 26;
+const int PIN_LAMB = 27;
+const int PIN_PERFUME = 32;
+const int PIN_MOT_DIR = 33;
+const int PIN_MOT_PUL = 23;
+
+WebServer server(80);
+
+// --- SYSTEM STATES (The "Brain" of the code) ---
+String motorState = "STOP";
+bool soundActive = false;
+bool ledActive = false;
+bool lambActive = false;
+bool perfumeActive = false;
+
+// Timing for non-blocking motor
+unsigned long lastStepTime = 0;
+const int stepDelay = 3000; 
+
+void setup() {
+  Serial.begin(115200);
+  delay(1000); 
+
+  int outputPins[] = { PIN_SOUND, PIN_LED, PIN_LAMB, PIN_PERFUME, PIN_MOT_DIR, PIN_MOT_PUL };
+  for (int i = 0; i < 6; i++) {
+    pinMode(outputPins[i], OUTPUT);
+    digitalWrite(outputPins[i], LOW);
+  }
+
+  // تفعيل وضع الـ Access Point بدلاً من الاتصال بالراوتر
+  Serial.println("Configuring Access Point...");
+  WiFi.softAP(ap_ssid, ap_password);
+
+  // طباعة الـ IP الثابت للوحة في هذا الوضع
+  IPAddress myIP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(myIP); 
+
+
+  server.on("/sound/on", []() {
+    soundActive = true;
+    server.send(200, "text/plain", "Sound: ON");
+    Serial.println("Sound: ON");
+  });
+  server.on("/sound/off", []() {
+    soundActive = false;
+    server.send(200, "text/plain", "Sound: OFF");
+    Serial.println("Sound: OFF");
+  });
+
+  // 2. LED
+  server.on("/led/on", []() {
+    ledActive = true;
+    server.send(200, "text/plain", "LED: ON");
+    Serial.println("LED: ON");
+  });
+  server.on("/led/off", []() {
+    ledActive = false;
+    server.send(200, "text/plain", "LED: OFF");
+    Serial.println("LED: OFF");
+  });
+
+  // 3. Lamb
+  server.on("/lamb/on", []() {
+    lambActive = true;
+    server.send(200, "text/plain", "Lamb: ON");
+    Serial.println("Lamb: ON");
+  });
+  server.on("/lamb/off", []() {
+    lambActive = false;
+    server.send(200, "text/plain", "Lamb: OFF");
+    Serial.println("Lamb: OFF");
+  });
+
+  // 4. Aroma/Perfume
+  server.on("/aroma/on", []() {
+    perfumeActive = true;
+    server.send(200, "text/plain", "Aroma: ON");
+    Serial.println("Aroma: ON");
+  });
+  server.on("/aroma/off", []() {
+    perfumeActive = false;
+    server.send(200, "text/plain", "Aroma: OFF");
+    Serial.println("Aroma: OFF");
+  });
+
+  // 5. Motor
+  server.on("/motor", []() {
+    if (server.hasArg("move")) {
+      motorState = server.arg("move");
+      server.send(200, "text/plain", "Motor: " + motorState);
+      Serial.println("Motor command: " + motorState);
+    }
+  });
+
+  server.begin();
+  Serial.println("HTTP Server Started!");
+}
+
+void loop() {
+  server.handleClient();
+
+  // --- APPLY STATES TO HARDWARE ---
+
+  // Control MOSFETs/Relays based on Boolean states
+  digitalWrite(PIN_SOUND, soundActive ? HIGH : LOW);
+  digitalWrite(PIN_LED, ledActive ? HIGH : LOW);
+  digitalWrite(PIN_LAMB, lambActive ? HIGH : LOW);
+  digitalWrite(PIN_PERFUME, perfumeActive ? HIGH : LOW);
+
+  // Control Motor Logic (Non-blocking)
+  if (motorState != "STOP") {
+    digitalWrite(PIN_MOT_DIR, (motorState == "UP") ? HIGH : LOW);
+
+    unsigned long currentMicros = micros();
+    if (currentMicros - lastStepTime >= stepDelay) {
+      lastStepTime = currentMicros;
+      digitalWrite(PIN_MOT_PUL, !digitalRead(PIN_MOT_PUL));
+    }
+  } else {
+    digitalWrite(PIN_MOT_PUL, LOW);  // Ensure motor stops pulsing
+  }
+}

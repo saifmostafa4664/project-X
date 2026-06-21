@@ -21,6 +21,10 @@ class UmbrellaDeviceState {
 
   final SoundState sound;
 
+  final bool isLampOn;
+
+  final bool isAromaOn;
+
   final DateTime lastUpdated;
 
   final bool isSimulationMode;
@@ -31,6 +35,8 @@ class UmbrellaDeviceState {
     this.battery = const BatteryState(),
     this.lighting = const LightingState(),
     this.sound = const SoundState(),
+    this.isLampOn = false,
+    this.isAromaOn = false,
     required this.lastUpdated,
     this.isSimulationMode = true,
   });
@@ -41,6 +47,8 @@ class UmbrellaDeviceState {
     BatteryState? battery,
     LightingState? lighting,
     SoundState? sound,
+    bool? isLampOn,
+    bool? isAromaOn,
     DateTime? lastUpdated,
     bool? isSimulationMode,
   }) {
@@ -50,6 +58,8 @@ class UmbrellaDeviceState {
       battery: battery ?? this.battery,
       lighting: lighting ?? this.lighting,
       sound: sound ?? this.sound,
+      isLampOn: isLampOn ?? this.isLampOn,
+      isAromaOn: isAromaOn ?? this.isAromaOn,
       lastUpdated: lastUpdated ?? this.lastUpdated,
       isSimulationMode: isSimulationMode ?? this.isSimulationMode,
     );

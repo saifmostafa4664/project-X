@@ -29,10 +29,6 @@ class UmbrellaControlNotifier extends AsyncNotifier<UmbrellaPosition> {
 
   Future<void> open() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) {
-      state = AsyncValue.error('Device not connected', StackTrace.current);
-      return;
-    }
 
     state = const AsyncValue.loading();
     try {
@@ -45,10 +41,6 @@ class UmbrellaControlNotifier extends AsyncNotifier<UmbrellaPosition> {
 
   Future<void> close() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) {
-      state = AsyncValue.error('Device not connected', StackTrace.current);
-      return;
-    }
 
     state = const AsyncValue.loading();
     try {

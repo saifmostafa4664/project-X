@@ -14,6 +14,7 @@ import '../../../state/device_provider.dart';
 import '../../../state/lighting_provider.dart';
 import '../../../state/sound_provider.dart';
 import '../../../state/battery_provider.dart';
+import '../../../state/lamp_aroma_provider.dart';
 import '../../../state/user_profile.dart';
 import 'widgets/umbrella_control_card.dart';
 import 'widgets/quick_control_card.dart';
@@ -162,7 +163,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               ),
 
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                 sliver: SliverToBoxAdapter(
                   child: Row(
                     children: [
@@ -182,6 +183,33 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                     ],
                   ),
                 ),
+              ),
+
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+                sliver: SliverToBoxAdapter(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _buildLampCard(context, ref, isConnected)
+                            .animate()
+                            .fadeIn(delay: 450.ms, duration: 500.ms)
+                            .slideX(begin: -0.1, end: 0),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: _buildAromaCard(context, ref, isConnected)
+                            .animate()
+                            .fadeIn(delay: 500.ms, duration: 500.ms)
+                            .slideX(begin: 0.1, end: 0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SliverPadding(
+                padding: EdgeInsets.only(bottom: 120),
               ),
             ],
           ),
@@ -211,12 +239,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
           : Icons.lightbulb_outline_rounded,
       iconColor: lighting.isOn ? lighting.color : AppColors.amber,
       isActive: lighting.isOn,
-      isEnabled: isConnected,
+      isEnabled: true,
       onTap: () => context.go(RoutePaths.lighting),
       onToggle: () {
-        if (isConnected) {
-          ref.read(lightingControlProvider.notifier).toggle();
-        }
+        ref.read(lightingControlProvider.notifier).toggle();
       },
     );
   }
@@ -235,12 +261,56 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
           : Icons.volume_off_rounded,
       iconColor: sound.isPlaying ? AppColors.teal : AppColors.rose,
       isActive: sound.isPlaying,
-      isEnabled: isConnected,
+      isEnabled: true,
       onTap: () => context.go(RoutePaths.sound),
       onToggle: () {
-        if (isConnected) {
-          ref.read(soundControlProvider.notifier).togglePlayback();
-        }
+        ref.read(soundControlProvider.notifier).togglePlayback();
+      },
+    );
+  }
+
+  Widget _buildLampCard(
+    BuildContext context,
+    WidgetRef ref,
+    bool isConnected,
+  ) {
+    final isLampOn = ref.watch(isLampOnProvider);
+    return QuickControlCard(
+      title: 'Lamp',
+      subtitle: isLampOn ? 'On' : 'Off',
+      icon: isLampOn
+          ? Icons.wb_incandescent_rounded
+          : Icons.wb_incandescent_outlined,
+      iconColor: isLampOn ? AppColors.amber : AppColors.warmGray500,
+      isActive: isLampOn,
+      isEnabled: true,
+      onTap: () {
+        ref.read(lampControlProvider.notifier).toggle();
+      },
+      onToggle: () {
+        ref.read(lampControlProvider.notifier).toggle();
+      },
+    );
+  }
+
+  Widget _buildAromaCard(
+    BuildContext context,
+    WidgetRef ref,
+    bool isConnected,
+  ) {
+    final isAromaOn = ref.watch(isAromaOnProvider);
+    return QuickControlCard(
+      title: 'Aroma',
+      subtitle: isAromaOn ? 'On' : 'Off',
+      icon: isAromaOn ? Icons.air_rounded : Icons.air_outlined,
+      iconColor: isAromaOn ? AppColors.party : AppColors.warmGray500,
+      isActive: isAromaOn,
+      isEnabled: true,
+      onTap: () {
+        ref.read(aromaControlProvider.notifier).toggle();
+      },
+      onToggle: () {
+        ref.read(aromaControlProvider.notifier).toggle();
       },
     );
   }

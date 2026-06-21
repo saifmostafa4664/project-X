@@ -130,11 +130,9 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     value: lighting.isOn,
-                    onChanged: isConnected
-                        ? (_) => ref
-                              .read(lightingControlProvider.notifier)
-                              .toggle()
-                        : null,
+                    onChanged: (_) => ref
+                          .read(lightingControlProvider.notifier)
+                          .toggle(),
                   ),
                 ),
 
@@ -149,7 +147,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
                     min: 0,
                     max: 100,
                     divisions: 20,
-                    onChanged: isConnected && lighting.isOn
+                    onChanged: lighting.isOn
                         ? (value) {
                             ref
                                 .read(lightingControlProvider.notifier)
@@ -171,7 +169,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
                       final isSelected =
                           _selectedColor.toARGB32() == color.toARGB32();
                       return GestureDetector(
-                        onTap: isConnected && lighting.isOn
+                        onTap: lighting.isOn
                             ? () {
                                 setState(() => _selectedColor = color);
                                 ref
@@ -228,7 +226,7 @@ class _LightingScreenState extends ConsumerState<LightingScreen> {
                     },
                     wheelDiameter: 220,
                     wheelWidth: 20,
-                    onColorChanged: isConnected && lighting.isOn
+                    onColorChanged: lighting.isOn
                         ? (color) {
                             setState(() => _selectedColor = color);
                             ref

@@ -210,7 +210,7 @@ class _SplashScreenState extends State<SplashScreen>
             left: 0,
             right: 0,
             child: Text(
-              'Powered by Saif MUstafa',
+              '',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.25),

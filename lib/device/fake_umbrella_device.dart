@@ -204,6 +204,32 @@ class FakeUmbrellaDevice extends UmbrellaDeviceInterface {
   }
 
   @override
+  Future<void> toggleLamp(bool on) async {
+    _ensureConnected();
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    _updateState(
+      _state.copyWith(
+        isLampOn: on,
+        lastUpdated: DateTime.now(),
+      ),
+    );
+  }
+
+  @override
+  Future<void> toggleAroma(bool on) async {
+    _ensureConnected();
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    _updateState(
+      _state.copyWith(
+        isAromaOn: on,
+        lastUpdated: DateTime.now(),
+      ),
+    );
+  }
+
+  @override
   Future<void> playMusic() async {
     _ensureConnected();
     await Future.delayed(const Duration(milliseconds: 100));

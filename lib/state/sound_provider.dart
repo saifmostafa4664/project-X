@@ -35,7 +35,6 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
 
   Future<void> togglePlayback() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     final isPlaying = ref.read(isPlayingProvider);
     state = const AsyncValue.loading();
@@ -54,7 +53,6 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
 
   Future<void> play() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     state = const AsyncValue.loading();
     try {
@@ -68,7 +66,6 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
 
   Future<void> pause() async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     state = const AsyncValue.loading();
     try {
@@ -82,7 +79,6 @@ class SoundControlNotifier extends AsyncNotifier<SoundState> {
 
   Future<void> setVolume(int level) async {
     final device = ref.read(deviceProvider);
-    if (!device.isConnected) return;
 
     try {
       await device.setVolume(level);
