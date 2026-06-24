@@ -1,5 +1,6 @@
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +19,7 @@ import '../../features/profile/presentation/profile_screen.dart';
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: RoutePaths.splash,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: kDebugMode,
     routes: [
       GoRoute(
         path: RoutePaths.splash,
@@ -134,6 +135,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RoutePaths.debug,
         name: RouteNames.debug,
+        redirect: (context, state) {
+          if (!kDebugMode) return RoutePaths.dashboard;
+          return null;
+        },
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const DebugScreen(),
@@ -183,10 +188,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
-              Text(
-                state.uri.toString(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              if (kDebugMode)
+                Text(
+                  state.uri.toString(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => context.go(RoutePaths.dashboard),
