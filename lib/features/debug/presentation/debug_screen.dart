@@ -3,6 +3,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/themed_surface_container.dart';
+import '../../../core/widgets/icon_badge.dart';
 import '../../../state/device_provider.dart';
 import '../../../device/fake_umbrella_device.dart';
 
@@ -296,30 +298,17 @@ class _DebugToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: value
-              ? iconColor.withValues(alpha: 0.5)
-              : (isDark ? AppColors.warmGray700 : AppColors.warmGray200),
-          width: value ? 2 : 1,
-        ),
-      ),
+    return ThemedSurfaceContainer(
+      borderRadius: 16,
+      borderColor: value
+          ? iconColor.withValues(alpha: 0.5)
+          : null,
+      borderWidth: value ? 2 : 1,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: iconColor, size: 22),
-            ),
+            IconBadge(icon: icon, color: iconColor),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -372,14 +361,8 @@ class _DebugButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? AppColors.warmGray700 : AppColors.warmGray200,
-        ),
-      ),
+    return ThemedSurfaceContainer(
+      borderRadius: 16,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -389,18 +372,10 @@ class _DebugButton extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: iconColor.withValues(alpha: isEnabled ? 0.15 : 0.05),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: iconColor.withValues(alpha: isEnabled ? 1.0 : 0.3),
-                    size: 22,
-                  ),
+                IconBadge(
+                  icon: icon,
+                  color: iconColor.withValues(alpha: isEnabled ? 1.0 : 0.3),
+                  backgroundAlpha: isEnabled ? 0.15 : 0.05,
                 ),
                 const SizedBox(width: 16),
                 Expanded(
